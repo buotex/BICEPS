@@ -1,0 +1,5 @@
+#include_directories(boost_1_34_1/boost zlib-1.2.3)
+#include_directories()
+#add_subdirectory(boost_1_34_1)
+include_directories(lib)
+add_subdirectory(lib)

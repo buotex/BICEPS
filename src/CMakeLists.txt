@@ -1,0 +1,66 @@
+
+SET(
+	DIRECTAG_SRC_DIRS
+	${PROJECT_SOURCE_DIR}/libs/directag/freicore 
+	${PROJECT_SOURCE_DIR}/libs/directag/pwiz-src 
+	${PROJECT_SOURCE_DIR}/libs/directag/pwiz-src/libraries
+	${PROJECT_SOURCE_DIR}/libs/directag/pwiz-src/pwiz
+	${PROJECT_SOURCE_DIR}/libs/directag/ext/src/expat-2.0.1/lib
+	)
+include_directories("${PROJECT_SOURCE_DIR}/libs/pepsplice" "${PROJECT_SOURCE_DIR}/libs/pepnovo" "${PROJECT_SOURCE_DIR}/libs/directag/directag" "${PROJECT_SOURCE_DIR}/libs/boost" ${DIRECTAG_SRC_DIRS} "${PROJECT_SOURCE_DIR}/libs/gmm-bic")
+include_directories(${Boost_INCLUDE_DIRS})
+link_directories("{Boost_LIBRARY_DIRS}")
+link_directories (${PROJECT_SOURCE_DIR}/src "${PROJECT_SOURCE_DIR}/libs/pepsplice" "${PROJECT_SOURCE_DIR}/libs/pepnovo" "${PROJECT_SOURCE_DIR}/libs/directag/directag" "${PROJECT_SOURCE_DIR}/libs" ${DIRECTAG_SRC_DIRS} "${PROJECT_SOURCE_DIR}/libs/gmm-bic")
+#add_library(ets main.cpp fasta.cpp fasta.h)
+
+if(WIN32)
+SET(
+WIN32_ONLY_LIBS
+thermo
+)
+ELSE(WIN32)
+SET(
+WIN32_ONLY_LIBS
+)
+SET(
+PTHREAD
+pthread
+)
+
+ENDIF(WIN32)
+
+IF(HAVE_PEPNOVO)
+ADD_DEFINITIONS(-DHAVE_PEPNOVO)
+SET(PEPNOVO_LIBS
+	pepnovo
+)
+ELSE(HAVE_PEPNOVO)
+SET(PEPNOVO_LIBS)
+
+ENDIF(HAVE_PEPNOVO)
+
+
+IF(HAVE_DIRECTAG)
+ADD_DEFINITIONS(-DHAVE_DIRECTAG)
+SET(DIRECTAG_LIBS
+directag freicore Directag_MSDATA PWIZ_MISC_UTILITY vendor_readers minixml spectrum_processing zlib ${PTHREAD} ${WIN32_ONLY_LIBS}
+${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_IOSTREAMS_LIBRARY} ${Boost_SERIALIZATION_LIBRARY}
+)
+ELSE(HAVE_DIRECTAG)
+SET(DIRECTAG_LIBS)
+ENDIF(HAVE_DIRECTAG)
+
+SET(GMMBIC_LIBS
+gmm_bic)
+
+
+add_executable(ETS main.cpp ets.cpp ets.h fasta.cpp fasta.h CommandParser.h CommandParser.cpp)
+
+
+
+#target_link_libraries(ETS pepsplice pepnovo directag freicore Directag_MSDATA gmm_bic PWIZ_MISC_UTILITY ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_IOSTREAMS_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} vendor_readers minixml  spectrum_processing zlib ${PTHREAD} ${WIN32_ONLY_LIBS} ${TCMALLOC_LIB}) 
+
+
+target_link_libraries(ETS pepsplice ${Boost_PROGRAM_OPTIONS_LIBRARY} ${PEPNOVO_LIBS} ${DIRECTAG_LIBS} ${GMMBIC_LIBS} ${TCMALLOC_LIB}) 
+
+
