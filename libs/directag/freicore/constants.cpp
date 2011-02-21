@@ -1,0 +1,30 @@
+#include "constants.h"
+
+const float CARBON_ISOTOPES[NUM_ISOTOPES]	= { 0.9893f,	0.0107f,	0.f,		0.f,		0.f };
+const float HYDROGEN_ISOTOPES[NUM_ISOTOPES]	= { 0.999885f,	0.000115f,	0.f,		0.f,		0.f };
+const float OXYGEN_ISOTOPES[NUM_ISOTOPES]	= { 0.99757f,	0.00038f,	0.00205f,	0.f,		0.f };
+const float NITROGEN_ISOTOPES[NUM_ISOTOPES]	= { 0.99632f,	0.00368f,	0.f,		0.f,		0.f };
+const float SULFUR_ISOTOPES[NUM_ISOTOPES]	= { 0.9493f,	0.0076f,	00.429f,	0.0002f,	0.f };
+
+const float CARBON_MONO		= 12.00000f;
+const float CARBON_AVG		= 12.01078f;
+const float HYDROGEN_MONO	= 01.00783f;
+const float HYDROGEN_AVG	= 01.00794f;
+const float OXYGEN_MONO		= 15.99491f;
+const float OXYGEN_AVG		= 15.99943f;
+const float NITROGEN_MONO	= 14.00304f;
+const float NITROGEN_AVG	= 14.00672f;
+const float SULFUR_MONO		= 31.97207f;
+const float SULFUR_AVG		= 32.06550f;
+
+const float WATER_MONO		= 2*HYDROGEN_MONO + OXYGEN_MONO;
+const float WATER_AVG		= 2*HYDROGEN_AVG + OXYGEN_AVG;
+
+const float AMMONIA_MONO	= 3*HYDROGEN_MONO + NITROGEN_MONO;
+const float AMMONIA_AVG		= 3*HYDROGEN_AVG + NITROGEN_AVG;
+
+const char PEPTIDE_N_TERMINUS_STRING[2] = { PEPTIDE_N_TERMINUS_SYMBOL, '\0' };
+const char PEPTIDE_C_TERMINUS_STRING[2] = { PEPTIDE_C_TERMINUS_SYMBOL, '\0' };
+
+const char PROTEIN_N_TERMINUS_STRING[2] = { PROTEIN_N_TERMINUS_SYMBOL, '\0' };
+const char PROTEIN_C_TERMINUS_STRING[2] = { PROTEIN_C_TERMINUS_SYMBOL, '\0' };

@@ -1,0 +1,79 @@
+2008-06-11  chambers
+
+	- build system conversion to Boost.Build finalized (README files updated accordingly)
+	- added ProteoWizard subtree to Bumbershoot repository
+
+	- FreiCore
+	  * added preliminary support for mzML-style id attributes (stringID, nativeID, and index)
+	  * SearchSpectrum writes pepXML with that support
+	  * refactored scanInfo and BaseSpectrum::scanId to SpectrumId and BaseSpectrum::id
+	  * switch from LibMSR to ProteoWizard for MS data reading (and soon writing too!)
+	  * switched to use optional ostream pointer to provide qonversion details instead of global variable
+	  * switched to use optimized_lexical_cast in ProteoWizard
+
+	- DirecTag
+	  * updated TagFile output to include Zeqiang's requested fields and use mzML-style attributes
+	  * updated usage line to reflect support for generic MS formats
+
+	- MyriMatch
+	  * fixed to support 64-bit integers for search-time estimates and statistics
+
+2008-04-20  chambers
+
+	- everything: capitalization refactor touched a lot of files
+	- IDPickerQonvert, generateSpectrumSvg, dbreverser, directag: new Jam-based build system
+
+2007-12-14  chambers
+
+	- DirecTag: fix to not generate tags using the N and C terminus symbols
+
+2007-12-07  chambers
+
+	- FreiCore
+	 * added real/decoy tracking to ProteinStore
+	 * fixed template bug in BaseSpectraList::random_shuffle()
+	 * fixed some calls to boost::filesystem to use native name checking
+	 * all builds, not just Windows, will use native name checking for boost::filesystem
+
+	- DirecTag
+	 * updated to work with newer FreiCore code (added a SearchResult, adjusted to work with libmsr, etc.)
+	 * inline validation currently commented out
+
+	- MyriMatch
+	 * fixed debug configuration to point to libmsr (need to fix MPI builds too)
+	 * fixed some calls to boost::filesystem to use native name checking
+	 * updated usage line to not specify mzData as spectra input (need to update docs)
+
+	- SQTer: fixed bug in conversion of the OUT format's 12 hour time to 24 hour time
+
+2007-11-28  chambers
+
+	- Freicore
+	 * added Histogram.h file that was not yet in repository (oops)
+
+	- Updated remaining solutions and project files to reflect "common" directory being renamed
+
+2007-09-21  chambers
+
+	- Various: updates related to renaming sqtFile->searchSpectrum and writeToSVG->writeToSvgFile
+	- Tests: validation of new peptide terminal symbols with CalculateSequenceIons
+
+2007-08-17  chambers
+
+	- DirecTag / GraphTag:
+	 * major syntax updates to GraphTag
+	 * updated to use new intensity rank system which is used to shade the nodes
+	 * edges are drawn for the >+1 fragment tag graphs (as dashed or dotted lines)
+	 * added GraphTag::RunTimeConfig which inherits from DirecTag::RunTimeConfig and made fixes to make this possible
+
+2007-08-17  chambers
+
+	- DirecTag / FreiCore:
+	 * fixes for input and output of static c/i/m scoring
+
+	- TagValidate: fixed bug with blank entries in the file comparison columns and not giving error when unable to write file comparison TSV
+
+2007-08-15  chambers
+
+	- FreiTag/DirecTag: application renamed, directories and filenames changed; old FreiTag direcotry is archived for previous CVS revisions
+
