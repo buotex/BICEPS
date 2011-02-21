@@ -50,4 +50,5 @@ SET(Directag_MSDATA_SRCS
 #  get_filename_component(filename ${source_file} NAME_WE)
 #  add_library(${filename} ${source_file})
 #  endforeach(source_file ${folder_source})
+add_definitions(-DBOOST_IOSTREAMS_NO_LIB)
 add_library(Directag_MSDATA ${Directag_MSDATA_SRCS})
