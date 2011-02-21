@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.4.7)
 cmake_policy(SET CMP0003 NEW)
-project(ets)
+cmake_policy(SET CMP0015 NEW)
+project(biceps)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(Boost_USE_STATIC_LIBS ON)
@@ -44,7 +45,7 @@ ENDIF(HAVE_MEMMOVE)
 
 
 include_directories(${Boost_INCLUDE_DIRS})
-include_directories("${PROJECT_SOURCE_DIR}/directag" "${PROJECT_SOURCE_DIR}/freicore" "${PROJECT_SOURCE_DIR}/pwiz-src/pwiz" "${Boost_INCLUDE_DIRS}" "${Boost_LIBRARY_DIRS}" "${PROJECT_SOURCE_DIR}/src")
+include_directories("${Boost_INCLUDE_DIRS}" "${Boost_LIBRARY_DIRS}" "${PROJECT_SOURCE_DIR}/src")
 link_directories ("${Boost_LIBRARY_DIRS}" "${PROJECT_SOURCE_DIR}/pwiz-src/libraries/zlib-1.2.3")
 add_subdirectory(libs)
 add_subdirectory(src)

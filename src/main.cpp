@@ -1,4 +1,4 @@
-#include "ets.h"
+#include "Biceps.h"
 
 
 
@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]){
     try{
-        Ets(argc,argv);
+        Biceps(argc,argv);
     }
     catch (std::string & e){
         cout << e << endl;

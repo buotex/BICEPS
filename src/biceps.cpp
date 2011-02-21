@@ -1,9 +1,9 @@
-#include "ets.h"
+#include "biceps.h"
 const double PI = 3.14159265;
 
 
 
-void Ets::initialize(int argc, char* argv[])
+void Biceps::initialize(int argc, char* argv[])
 {    
   mgfId = 0;
   int status = parseProgramOptions(
@@ -29,7 +29,7 @@ void Ets::initialize(int argc, char* argv[])
   }
 }
 
-void Ets::showLicenses()
+void Biceps::showLicenses()
 {
 #ifdef HAVE_PEPNOVO
   if (genOp.tool == PEPNOVO || genOp.tool == PEPNDIREC)
@@ -56,7 +56,7 @@ void Ets::showLicenses()
 
 
 
-bool Ets::isDosFile(std::string & filename)
+bool Biceps::isDosFile(std::string & filename)
 {
   std::ifstream file;
   file.open(filename.c_str(),ios::binary);
@@ -94,7 +94,7 @@ bool Ets::isDosFile(std::string & filename)
 
 
 
-void Ets::readMGF()
+void Biceps::readMGF()
 {
     std::string filename = genOp.mgfname + string(".mgf");
 
@@ -124,8 +124,8 @@ void Ets::readMGF()
 
     ofstream bufferfile;
     ofstream results;
-    string tempresultname = std::string("ETS_tempResults") + genOp.mgfname + string(".txt");
-    results.open(tempresultname.c_str(), ios::binary); //ets_results will handle the final output.
+    string tempresultname = std::string("Biceps_tempResults") + genOp.mgfname + string(".txt");
+    results.open(tempresultname.c_str(), ios::binary); //Biceps_results will handle the final output.
 
     while(std::getline(mgfFile, linebuffer, '\n') )
     {  
@@ -296,7 +296,7 @@ void Ets::readMGF()
     assert(pepResults.size() == numGoodscores);//check if all the results are in pepres
 
     ofstream resfile;
-    string resfileName = string("ETS_gmm") + genOp.mgfname + string(".txt");
+    string resfileName = string("Biceps_gmm") + genOp.mgfname + string(".txt");
     resfile.open(resfileName.c_str(), ios::trunc | ios::binary);
 
     //temporary score-output to call bic on.
@@ -317,13 +317,13 @@ void Ets::readMGF()
         gmm_bic(2,numGoodscores,resfileName.c_str(), mu, sigma, labels);
         cutoff = findCutoff(mu, sigma, 2); //using 0.05 as cutoff
 
-        Ets::writeCompleteResult(pepResults, indices, titles, labels, mu, sigma, cutoff);
-        Ets::writeFasta(pepResults);
+        Biceps::writeCompleteResult(pepResults, indices, titles, labels, mu, sigma, cutoff);
+        Biceps::writeFasta(pepResults);
     }
 }
 
 
-void Ets::writeCompleteResult
+void Biceps::writeCompleteResult
 (const std::vector<PepspliceResult> & pepResults, 
  const std::vector<int> & indices, 
  const std::vector<string> & titles, 
@@ -333,8 +333,8 @@ void Ets::writeCompleteResult
  const double cutoff) const
 {
     std::ofstream finalOutput;
-    std::string finalOutputName = string("ETS_Results") + genOp.mgfname+ string(".txt");
-    finalOutput.open("ETS_Results.txt", ios::trunc);
+    std::string finalOutputName = string("Biceps_Results") + genOp.mgfname+ string(".txt");
+    finalOutput.open("Biceps_Results.txt", ios::trunc);
     if (!finalOutput) throw runtime_error(finalOutputName + string(" can't be written, skipping."));
     for (size_t i = 0; i < pepResults.size(); i++)
     {
@@ -350,13 +350,13 @@ void Ets::writeCompleteResult
 }
 
 
-void Ets::writeFasta(std::vector<PepspliceResult> & pepResults)
+void Biceps::writeFasta(std::vector<PepspliceResult> & pepResults)
 {
     //the parsing/changing isn't commutative, so the order is important - high bic is more important here.
     std::sort(pepResults.begin(),pepResults.end(), PepspliceResultComparator());
     
     std::ofstream fastaoutput;
-    string fastaoutputname = string("ETS_Fasta") + genOp.mgfname + string(".fasta"); 
+    string fastaoutputname = string("Biceps_Fasta") + genOp.mgfname + string(".fasta"); 
     fastaoutput.open(fastaoutputname.c_str(), ios::trunc);
     if (!fastaoutput.is_open())
     {
@@ -400,7 +400,7 @@ void Ets::writeFasta(std::vector<PepspliceResult> & pepResults)
 
 
 //This part will call the libraries.
-bool Ets::run_programs(){
+bool Biceps::run_programs(){
 
     string pepnovoTags; //save the resulting tags there.
     string directagTags;
@@ -438,7 +438,7 @@ bool Ets::run_programs(){
 
     try{
         if (genOp.tool == DIRECTAG || genOp.tool == PEPNDIREC){
-            std::string cachename = std::string("ETS_DirectagCache") + genOp.mgfname + std::string(".cache");
+            std::string cachename = std::string("Biceps_DirectagCache") + genOp.mgfname + std::string(".cache");
             directagFunc(directOp.size(),directOp, directagTags, dlowPeakMzs, cachename); //tags written
         }
     }
@@ -524,7 +524,7 @@ bool Ets::run_programs(){
 //Call pepsplice after actually creating a fasta (this will depend on the mutation switch)
 //pepN1 etc. will tell which tags shall be considered.
 
-PepspliceResult Ets::runPepsplice(bool mutation, int pepN1, int pepN2,  int dirN1, int dirN2 ){
+PepspliceResult Biceps::runPepsplice(bool mutation, int pepN1, int pepN2,  int dirN1, int dirN2 ){
     float penalty_mutation = (mutation)? 2.0:0.0;
     std::vector<PepspliceResult> pepnresults;
     std::vector<PepspliceResult> direcresults;
@@ -584,7 +584,7 @@ PepspliceResult Ets::runPepsplice(bool mutation, int pepN1, int pepN2,  int dirN
 }
 
 
-int Ets::writeResult(std::ostream & os, const Pepsplice::PepspliceResult & res, const int specIndex, const std::string & title) const
+int Biceps::writeResult(std::ostream & os, const Pepsplice::PepspliceResult & res, const int specIndex, const std::string & title) const
 {
     os << specIndex << "\n";
     os << "Title=" << title << "\n";
@@ -601,7 +601,7 @@ int Ets::writeResult(std::ostream & os, const Pepsplice::PepspliceResult & res, 
     return 1;
 }
 
-double Ets::findCutoff(std::vector<double> & mu, std::vector<double> & sigma, int selector)
+double Biceps::findCutoff(std::vector<double> & mu, std::vector<double> & sigma, int selector)
 {
     double quantile;
     switch (selector){
@@ -622,7 +622,7 @@ double Ets::findCutoff(std::vector<double> & mu, std::vector<double> & sigma, in
 
 }
 
-string Ets::convertTupleString(const string & sequence)const 
+string Biceps::convertTupleString(const string & sequence)const 
 {
     string newSeq = "";
     for (size_t i = 0; i < sequence.size(); i++)
@@ -637,7 +637,7 @@ string Ets::convertTupleString(const string & sequence)const
 }
 
 //Source: Slightly Modified Pepsplice Code
-void Ets::loadAAModifications() 
+void Biceps::loadAAModifications() 
 {
 
     ifstream inFile1;
@@ -685,14 +685,14 @@ void Ets::loadAAModifications()
 }
 
 
-double Ets::returnConfidence(double score, double mu, double sigma) const
+double Biceps::returnConfidence(double score, double mu, double sigma) const
 {
     return 1/(sigma * std::sqrt(2*PI)) * std::exp( -0.5 * (score-mu)*(score-mu)/(sigma *sigma));
 }
 
 
 
-void Ets::checkTupleConversion() const
+void Biceps::checkTupleConversion() const
 {
     for (map<unsigned char, char>::const_iterator it = aamod.begin(); it != aamod.end(); ++it)
     {
