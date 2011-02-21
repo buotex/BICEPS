@@ -81,7 +81,7 @@ ostream & operator<< ( ostream & os, Tag & tag);
 
 class Fasta
 {
-    friend class Ets;
+    friend class Biceps;
     public:
     ///The Default Constructor just initializes numOfTags to 20 and
     ///averageAAWeight to 111.0, which is used for heuristic expanding of the tag.

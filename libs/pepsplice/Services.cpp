@@ -225,7 +225,7 @@ void Services::incrementNucleotides(){
 void Services::suggestProgressReport(){ //deactivated ProgressReport by BX
 
   if(globaltime->timeSinceStart() > nexttime && force_tb_report == false){
-    doProgressReport();
+    //doProgressReport();
 		//writeLogFiles();
 		nexttime = nexttime * 1.05 + 1;
 	}

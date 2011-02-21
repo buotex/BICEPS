@@ -60,13 +60,9 @@ gmm_bic)
 
 
 
-add_executable(ETS main.cpp ets.cpp ets.h fasta.cpp fasta.h CommandParser.h CommandParser.cpp)
+add_executable(Biceps main.cpp biceps.cpp biceps.h fasta.cpp fasta.h CommandParser.h CommandParser.cpp)
 
 
-
-#target_link_libraries(ETS pepsplice pepnovo directag freicore Directag_MSDATA gmm_bic PWIZ_MISC_UTILITY ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_IOSTREAMS_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} vendor_readers minixml  spectrum_processing zlib ${PTHREAD} ${WIN32_ONLY_LIBS} ${TCMALLOC_LIB}) 
-
-
-target_link_libraries(ETS pepsplice ${Boost_PROGRAM_OPTIONS_LIBRARY} ${PEPNOVO_LIBS} ${DIRECTAG_LIBS} ${GMMBIC_LIBS} ${TCMALLOC_LIB}) 
+target_link_libraries(Biceps pepsplice ${Boost_PROGRAM_OPTIONS_LIBRARY} ${PEPNOVO_LIBS} ${DIRECTAG_LIBS} ${GMMBIC_LIBS} ${TCMALLOC_LIB}) 
 
 
