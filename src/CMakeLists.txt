@@ -42,16 +42,22 @@ ENDIF(HAVE_PEPNOVO)
 
 IF(HAVE_DIRECTAG)
 ADD_DEFINITIONS(-DHAVE_DIRECTAG)
+SET(ZLIB
+zlib
+zlib-boost
+)
 SET(DIRECTAG_LIBS
-directag freicore Directag_MSDATA PWIZ_MISC_UTILITY vendor_readers minixml spectrum_processing zlib ${PTHREAD} ${WIN32_ONLY_LIBS}
+	directag freicore Directag_MSDATA PWIZ_MISC_UTILITY vendor_readers minixml spectrum_processing ${ZLIB} ${PTHREAD} ${WIN32_ONLY_LIBS}
 ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_IOSTREAMS_LIBRARY} ${Boost_SERIALIZATION_LIBRARY}
 )
 ELSE(HAVE_DIRECTAG)
 SET(DIRECTAG_LIBS)
 ENDIF(HAVE_DIRECTAG)
 
+
 SET(GMMBIC_LIBS
 gmm_bic)
+
 
 
 add_executable(ETS main.cpp ets.cpp ets.h fasta.cpp fasta.h CommandParser.h CommandParser.cpp)
