@@ -63,6 +63,6 @@ gmm_bic)
 add_executable(Biceps main.cpp biceps.cpp biceps.h fasta.cpp fasta.h CommandParser.h CommandParser.cpp)
 
 
-target_link_libraries(Biceps pepsplice ${Boost_PROGRAM_OPTIONS_LIBRARY} ${PEPNOVO_LIBS} ${DIRECTAG_LIBS} ${GMMBIC_LIBS} ${TCMALLOC_LIB}) 
+target_link_libraries(Biceps pepsplice ${Boost_PROGRAM_OPTIONS_LIBRARY} ${PEPNOVO_LIBS} ${DIRECTAG_LIBS} ${GMMBIC_LIBS}) 
 
 

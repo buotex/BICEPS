@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.4.7)
 cmake_policy(SET CMP0003 NEW)
 cmake_policy(SET CMP0015 NEW)
-project(biceps)
+project(BICEPS)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(Boost_USE_STATIC_LIBS ON)
@@ -26,9 +26,6 @@ IF(HAVE_UNISTD)
 ENDIF(HAVE_UNISTD)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-find_package(tcmalloc)
-link_directories(${tcmalloc_INCLUDE_DIRS})
-set(TCMALLOC_LIB ${tcmalloc_LIBRARIES})
 
 
 #CHECK_INCLUDE_FILES(tcmalloc.h HAVE_TCMALLOC)
@@ -49,3 +46,68 @@ include_directories("${Boost_INCLUDE_DIRS}" "${Boost_LIBRARY_DIRS}" "${PROJECT_S
 link_directories ("${Boost_LIBRARY_DIRS}" "${PROJECT_SOURCE_DIR}/pwiz-src/libraries/zlib-1.2.3")
 add_subdirectory(libs)
 add_subdirectory(src)
+
+
+#############################################################################
+# documentation
+#############################################################################
+
+# doxygen support
+CONFIGURE_FILE(${BICEPS_SOURCE_DIR}/doc/Doxyfile.cmake
+    ${BICEPS_BINARY_DIR}/doc/Doxyfile
+    @ONLY IMMEDIATE
+    )
+FIND_PACKAGE(Doxygen)
+
+# target for doxygen
+ADD_CUSTOM_TARGET(doc COMMAND ${DOXYGEN} ${BICEPS_BINARY_DIR}/doc/Doxyfile)
+
+
+
+
+#############################################################################
+# installation
+#############################################################################
+
+# applications
+INSTALL(FILES ${BICEPS_BINARY_DIR}/bin/
+    DESTINATION bin/biceps
+    COMPONENT headers)
+
+# documentation
+INSTALL(DIRECTORY ${BICEPS_BINARY_DIR}/doc
+    DESTINATION share/biceps
+    COMPONENT documentation
+    PATTERN "Doxyfile" EXCLUDE)
+
+
+
+
+#############################################################################
+# packaging
+#############################################################################
+
+
+set(CPACK_PACKAGE_NAME "Biceps")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A Novel Error Tolerant Search Strategy for Cross-Species Proteomics")
+
+
+# CPack version strings
+SET(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
+SET(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
+SET(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
+
+SET(CPACK_RESOURCE_FILE_README "${BICEPS_SOURCE_DIR}/README.txt")
+SET(CPACK_RESOURCE_FILE_LICENSE "${BICEPS_SOURCE_DIR}/LICENSE.txt")
+
+set(CPACK_COMPONENTS_ALL libraries headers applications documentation)
+set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "Application")
+set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "C++ Interface Documentation")
+
+set(CPACK_COMPONENT_APPLICATIONS_DESCRIPTION
+    "The BICEPS executable.")
+set(CPACK_COMPONENT_DOCUMENTATION_DESCRIPTION
+    "The BICEPS documentation (Doxygen).")
+
+INCLUDE(CPack)
+
