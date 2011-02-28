@@ -43,7 +43,8 @@ ostream & operator<< ( ostream & os, Tag & tag);
 
 
 /** Fasta class
- * 
+ * \brief This class encapsulates all functions to deal with a fasta database 
+ *
  * This is a class for dealing with fasta-databases, like ipi.BOVIN.fasta.
  * Searching: Given Tags, which should be of the Tag class (with length of 5), this class is able to search for matching subsequences in the database.
  * While it is possible to only aim for identical sequences, mutations can also be considered.
