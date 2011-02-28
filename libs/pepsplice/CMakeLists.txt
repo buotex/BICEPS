@@ -1,3 +1,5 @@
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
 SET(PEPSPLICE_SRCS
 	BestMatches.cpp
 	Chromosome.cpp

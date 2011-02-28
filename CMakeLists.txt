@@ -8,10 +8,6 @@ set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 set(CMAKE_IS_EXPERIMENTAL YES_I_KNOW)
 find_package(Boost COMPONENTS filesystem system regex program_options iostreams serialization thread REQUIRED)
-if(!Boost_FOUND)
-set(Boost_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/boost/boost)
-set(Boost_LIBRARY_DIRS ${PROJECT_SOURCE_DIR}/lib)
-endif(!Boost_FOUND)
 
 OPTION(HAVE_PEPNOVO "ON, if you want to install and use Pepnovo"
 	ON)
@@ -41,9 +37,6 @@ IF(HAVE_MEMMOVE)
 ENDIF(HAVE_MEMMOVE)
 
 
-include_directories(${Boost_INCLUDE_DIRS})
-include_directories("${Boost_INCLUDE_DIRS}" "${Boost_LIBRARY_DIRS}" "${PROJECT_SOURCE_DIR}/src")
-link_directories ("${Boost_LIBRARY_DIRS}" "${PROJECT_SOURCE_DIR}/pwiz-src/libraries/zlib-1.2.3")
 add_subdirectory(libs)
 add_subdirectory(src)
 
@@ -70,9 +63,9 @@ ADD_CUSTOM_TARGET(doc COMMAND ${DOXYGEN} ${BICEPS_BINARY_DIR}/doc/Doxyfile)
 #############################################################################
 
 # applications
-INSTALL(FILES ${BICEPS_BINARY_DIR}/bin/
+INSTALL(DIRECTORY ${BICEPS_BINARY_DIR}/bin
     DESTINATION bin/biceps
-    COMPONENT headers)
+    COMPONENT )
 
 # documentation
 INSTALL(DIRECTORY ${BICEPS_BINARY_DIR}/doc
@@ -81,7 +74,11 @@ INSTALL(DIRECTORY ${BICEPS_BINARY_DIR}/doc
     PATTERN "Doxyfile" EXCLUDE)
 
 
-
+#############################################################################
+# syncing docs
+#############################################################################
+ADD_CUSTOM_TARGET(syncdocs COMMAND ${BICEPS_SOURCE_DIR}/scripts/sync-docs-gh-pages.sh ${BICEPS_SOURCE_DIR} ${BICEPS_BINARY_DIR})
+ADD_DEPENDENCIES(syncdocs doc)
 
 #############################################################################
 # packaging

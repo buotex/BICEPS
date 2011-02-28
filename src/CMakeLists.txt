@@ -8,8 +8,8 @@ SET(
 	${PROJECT_SOURCE_DIR}/libs/directag/ext/src/expat-2.0.1/lib
 	)
 include_directories("${PROJECT_SOURCE_DIR}/libs/pepsplice" "${PROJECT_SOURCE_DIR}/libs/pepnovo" "${PROJECT_SOURCE_DIR}/libs/directag/directag" "${PROJECT_SOURCE_DIR}/libs/boost" ${DIRECTAG_SRC_DIRS} "${PROJECT_SOURCE_DIR}/libs/gmm-bic")
+include_directories("${PROJECT_SOURCE_DIR}/include")
 include_directories(${Boost_INCLUDE_DIRS})
-link_directories("{Boost_LIBRARY_DIRS}")
 link_directories (${PROJECT_SOURCE_DIR}/src "${PROJECT_SOURCE_DIR}/libs/pepsplice" "${PROJECT_SOURCE_DIR}/libs/pepnovo" "${PROJECT_SOURCE_DIR}/libs/directag/directag" "${PROJECT_SOURCE_DIR}/libs" ${DIRECTAG_SRC_DIRS} "${PROJECT_SOURCE_DIR}/libs/gmm-bic")
 #add_library(ets main.cpp fasta.cpp fasta.h)
 
@@ -42,12 +42,8 @@ ENDIF(HAVE_PEPNOVO)
 
 IF(HAVE_DIRECTAG)
 ADD_DEFINITIONS(-DHAVE_DIRECTAG)
-SET(ZLIB
-zlib
-zlib-boost
-)
 SET(DIRECTAG_LIBS
-	directag freicore Directag_MSDATA PWIZ_MISC_UTILITY vendor_readers minixml spectrum_processing ${ZLIB} ${PTHREAD} ${WIN32_ONLY_LIBS}
+	directag freicore Directag_MSDATA PWIZ_MISC_UTILITY vendor_readers minixml spectrum_processing ${ZLIB_SELECTOR} ${PTHREAD} ${WIN32_ONLY_LIBS}
 ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_IOSTREAMS_LIBRARY} ${Boost_SERIALIZATION_LIBRARY}
 )
 ELSE(HAVE_DIRECTAG)
