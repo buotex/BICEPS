@@ -5,7 +5,7 @@
 /**
  * @Author Buote Xu (Buote.Xu@stud.uni-heidelberg.de)
  * @date   January, 2010
- * @brief  Header for including Commandline-Parsing in ETS
+ * @brief  Header for including Commandline-Parsing in Biceps
  *
  */
 
@@ -81,7 +81,7 @@ struct general_options{
     int debug;
 
 
-    /// If 0, no mutation of the tags will be done by ETS.
+    /// If 0, no mutation of the tags will be done by Biceps.
     /// This will limit the number of matches tremendously,
     /// only deactivate for speed reasons
     /// Default: true bool
@@ -110,7 +110,7 @@ struct general_options{
  * @brief   The function takes argc and argv
  * Additionally, You have to pass the three vector<string> & and a general_options object
  * In return, this function will fill the objects accordingly so that you can pass them
- * directly to their respective functions in ETS.
+ * directly to their respective functions in Biceps.
  *
  * This API provides certain actions as an example.
  *

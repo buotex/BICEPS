@@ -54,7 +54,7 @@ ostream & operator<< ( ostream & os, Tag & tag);
  * As actually creating all different mutations and searching for them in the database is very time-consuming, an approach is chosen where it's possible that 1 compare between the tag and the subsequence may fail,
  * though this is only possible if we use a hash table to actually match either the beginning or the ending of a tag to the subsequence first.
  *
- * Creating: Pepsplice, another library which is used in the ETS program, needs fasta-databases to find AA-sequences.
+ * Creating: Pepsplice, another library which is used in the BICEPS program, needs fasta-databases to find AA-sequences.
  * As generic databases are too big to provide results in a reasonable time, a smaller customized one is more viable and will thus be created by the <tt>createFasta</tt>-method.
  * The result, a <tt>map<string, string></tt> containing modified and unmodified subsequences can then be processed by pepsplice.
  *
@@ -262,8 +262,6 @@ class Fasta
     ///doubleIndices[SequenceID][hash_of_pair][entry];
     vector<vector<vector<unsigned int> > > doubleIndices;
     
-    ///ETS needs some of the private functiosn
-    friend class ETS;
 
 };
 #endif

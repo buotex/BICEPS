@@ -131,7 +131,7 @@ int parseProgramOptions(
 		
 		if (vm.count("help")) 
 		{
-            std::cout << "Use ETS_config.cfg if you want to pass the parameters in a file" << "\n";
+            std::cout << "Use Biceps_config.cfg if you want to pass the parameters in a file" << "\n";
 			std::cout << visible << "\n";
 			return 1;
 		}
@@ -144,7 +144,7 @@ int parseProgramOptions(
         }
 		if (vm.count("version")) 
 		{
-			std::cout << "ETS, version 1.0\n";
+			std::cout << "Biceps, version 1.0\n";
 			return 1;
 		}
         
@@ -154,7 +154,7 @@ int parseProgramOptions(
             << mgf << "\n";
             genOp.mgfname = mgf.substr(0,mgf.length()-4);
             //std::cout << vm["input-file"].as<vector<string> >();
-            genOp.sSpectrumFN = string("ETS_buffer_") + genOp.mgfname + string(".mgf");
+            genOp.sSpectrumFN = string("Biceps_buffer_") + genOp.mgfname + string(".mgf");
             directOp[1] = genOp.sSpectrumFN;
             pepnOp[2] = genOp.sSpectrumFN;
             pepsOp[1] = genOp.sSpectrumFN;
