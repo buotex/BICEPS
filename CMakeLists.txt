@@ -53,8 +53,9 @@ CONFIGURE_FILE(${BICEPS_SOURCE_DIR}/doc/Doxyfile.cmake
 FIND_PACKAGE(Doxygen)
 
 # target for doxygen
+IF(DOXYGEN_FOUND)
 ADD_CUSTOM_TARGET(doc COMMAND ${DOXYGEN} ${BICEPS_BINARY_DIR}/doc/Doxyfile)
-
+ENDIF(DOXYGEN_FOUND)
 
 
 
