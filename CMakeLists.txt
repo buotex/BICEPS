@@ -63,16 +63,25 @@ ADD_CUSTOM_TARGET(doc COMMAND ${DOXYGEN} ${BICEPS_BINARY_DIR}/doc/Doxyfile)
 #############################################################################
 
 # applications
-INSTALL(DIRECTORY ${BICEPS_BINARY_DIR}/bin
-    DESTINATION bin/biceps
-    COMPONENT )
+#INSTALL(TARGETS biceps
+#    RUNTIME DESTINATION bin/biceps
+#    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+#    GROUP_READ GROUP_EXECUTE
+#    WORLD_READ WORLD_EXECUTE
+#    COMPONENT applications
+#    )
+
+
+
 
 # documentation
 INSTALL(DIRECTORY ${BICEPS_BINARY_DIR}/doc
     DESTINATION share/biceps
     COMPONENT documentation
     PATTERN "Doxyfile" EXCLUDE)
-
+INSTALL(DIRECTORY ${BICEPS_SOURCE_DIR}/include/Models
+  DESTINATION bin
+  COMPONENT models)
 
 #############################################################################
 # syncing docs
@@ -85,7 +94,7 @@ ADD_DEPENDENCIES(syncdocs doc)
 #############################################################################
 
 
-set(CPACK_PACKAGE_NAME "Biceps")
+set(CPACK_PACKAGE_NAME "biceps")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A Novel Error Tolerant Search Strategy for Cross-Species Proteomics")
 
 
@@ -97,7 +106,7 @@ SET(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
 SET(CPACK_RESOURCE_FILE_README "${BICEPS_SOURCE_DIR}/README.txt")
 SET(CPACK_RESOURCE_FILE_LICENSE "${BICEPS_SOURCE_DIR}/LICENSE.txt")
 
-set(CPACK_COMPONENTS_ALL libraries headers applications documentation)
+set(CPACK_COMPONENTS_ALL libraries headers applications models documentation)
 set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "Application")
 set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "C++ Interface Documentation")
 
