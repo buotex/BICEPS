@@ -44,13 +44,7 @@ RelWithDebInfo MinSizeRel."
 endif(NOT CMAKE_BUILD_TYPE)
 
 
-
-  if (MSVC)
-set(BICEPS_MODEL_PATH ${CMAKE_INSTALL_PREFIX}\bin\Models)
-else()
-
 set(BICEPS_MODEL_PATH ${CMAKE_INSTALL_PREFIX}/bin/Models)
-endif(MSVC)
 
 CONFIGURE_FILE(
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/pepnovo/Config.h.cmake 
