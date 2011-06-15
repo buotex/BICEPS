@@ -1,9 +1,0 @@
-Instructions for compiling Bumbershoot applications with the GNU Compiler Collection (GCC):
-1. Bumbershoot's build system uses Boost.Build; it is run with Boost jam (bjam).
-2. If your OS distribution does not have a package for Boost.Build (which includes bjam),
-   you can be download its source from Boost's SourceForge project at:
-   http://downloads.sourceforge.net/boost/boost-build-2.0-m12.tar.bz2?modtime=1191217830&big_mirror=0
-3. With Boost.Build set up, build an application normally by running "bjam" in that application's directory.
-4. To build an application with MPI support (for certain applications), run "bjam parallelism=mpi".
-5. To install an application, run "bjam install --prefix=<target directory>"; if you omit the --prefix
-   the application will be installed in a default location (e.g. /usr/local/bin)

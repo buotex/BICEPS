@@ -1,1 +1,0 @@
-add_library(minixml SAXParser.cpp XMLWriter.cpp)
