@@ -1,5 +1,5 @@
 #include "pepsplice.h"
-#include "Definitions.h"
+#include "definitions.h"
 namespace Pepsplice{
     
     extern Pool<Pepsplice::Tuple, POOLSIZE> __POOL__;    

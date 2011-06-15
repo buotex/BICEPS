@@ -33,8 +33,8 @@
 #include <vector>
 #include "Chromosome.h"
 #include "Protein.h"
-#include "Pool.h"
-#include "Definitions.h"
+#include "pool.h"
+#include "definitions.h"
 
 using namespace std;
 namespace Pepsplice{

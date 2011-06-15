@@ -28,7 +28,7 @@ using Pepsplice::PepspliceResultComparator;
 #include "fasta.h"
 
 //command-line parser
-#include "CommandParser.h"
+#include "commandparser.h"
 
 
 using boost::lexical_cast;
@@ -42,7 +42,7 @@ using boost::bad_lexical_cast;
  *
  * This class represents the glue to unite the different libraries.
  * It works in several steps:
- * At the beginning, <tt>initialize(argc, argv)</tt> will call the CommandParser, which is responsible for parsing the command-line parameters and changing the settings/flags accordingly.
+ * At the beginning, <tt>initialize(argc, argv)</tt> will call the commandparser, which is responsible for parsing the command-line parameters and changing the settings/flags accordingly.
  * During the next step, the mandatory fasta-database will be indexed and be made ready for later parsing.
  * The other mandatory parameter corresponds to the MGF-file, which is parsed line by line via <tt> readMGF </tt>.
  * Every time a complete spectrum is parsed (with BEGIN IONS and END IONS lines), it gBiceps passed in a temporary file to Directag/Pepnovo in <tt> run_programs</tt>.
@@ -117,7 +117,7 @@ private:
 
     ///write the final fasta with modifications.
     void writeFasta(std::vector<PepspliceResult> & pepResults);
-    ///Call the CommandParser to get all the needed parameters, start the Fasta parsing and go through the .mgf afterwards
+    ///Call the commandparser to get all the needed parameters, start the Fasta parsing and go through the .mgf afterwards
     void initialize(int argc, char* argv[]);
 
     ///show Pepnovo/Directag/Pepsplice Licenses
