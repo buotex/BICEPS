@@ -120,7 +120,7 @@ private:
 class Config {
 public:
 	
-	Config() : resource_dir("Models"), min_exclude_range(9999999), max_exclude_range(NEG_INF) {};
+	Config() : resource_dir("${BICEPS_MODEL_PATH}"), min_exclude_range(9999999), max_exclude_range(NEG_INF) {};
 
 	// sets the values for all defined PTMs
 	// any additional PTMs can only be user defined

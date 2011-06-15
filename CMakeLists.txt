@@ -36,6 +36,26 @@ IF(HAVE_MEMMOVE)
 	ADD_DEFINITIONS(-DHAVE_MEMMOVE=${HAVE_MEMMOVE})
 ENDIF(HAVE_MEMMOVE)
 
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING
+      "Choose the type of build, options are: Debug Release
+RelWithDebInfo MinSizeRel."
+      FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
+
+
+
+  if (MSVC)
+set(BICEPS_MODEL_PATH ${CMAKE_INSTALL_PREFIX}\bin\Models)
+else()
+
+set(BICEPS_MODEL_PATH ${CMAKE_INSTALL_PREFIX}/bin/Models)
+endif(MSVC)
+
+CONFIGURE_FILE(
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/pepnovo/Config.h.cmake 
+    ${BICEPS_BINARY_DIR}/libs/pepnovo/Config.h
+)
 
 add_subdirectory(libs)
 add_subdirectory(src)
@@ -46,10 +66,10 @@ add_subdirectory(src)
 #############################################################################
 
 # doxygen support
-CONFIGURE_FILE(${BICEPS_SOURCE_DIR}/doc/Doxyfile.cmake
-    ${BICEPS_BINARY_DIR}/doc/Doxyfile
-    @ONLY IMMEDIATE
-    )
+  CONFIGURE_FILE(${BICEPS_SOURCE_DIR}/doc/Doxyfile.cmake
+      ${BICEPS_BINARY_DIR}/doc/Doxyfile
+      @ONLY IMMEDIATE
+      )
 FIND_PACKAGE(Doxygen)
 
 # target for doxygen
@@ -62,26 +82,16 @@ ADD_CUSTOM_TARGET(doc COMMAND ${DOXYGEN} ${BICEPS_BINARY_DIR}/doc/Doxyfile)
 # installation
 #############################################################################
 
-# applications
-#INSTALL(TARGETS biceps
-#    RUNTIME DESTINATION bin/biceps
-#    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
-#    GROUP_READ GROUP_EXECUTE
-#    WORLD_READ WORLD_EXECUTE
-#    COMPONENT applications
-#    )
-
-
 
 
 # documentation
-INSTALL(DIRECTORY ${BICEPS_BINARY_DIR}/doc
-    DESTINATION share/biceps
-    COMPONENT documentation
-    PATTERN "Doxyfile" EXCLUDE)
-INSTALL(DIRECTORY ${BICEPS_SOURCE_DIR}/include/Models
-  DESTINATION bin
-  COMPONENT models)
+  INSTALL(DIRECTORY ${BICEPS_BINARY_DIR}/doc
+      DESTINATION share/biceps
+      COMPONENT documentation
+      PATTERN "Doxyfile" EXCLUDE)
+  INSTALL(DIRECTORY ${BICEPS_SOURCE_DIR}/include/Models
+      DESTINATION bin
+      COMPONENT models)
 
 #############################################################################
 # syncing docs
@@ -94,8 +104,8 @@ ADD_DEPENDENCIES(syncdocs doc)
 #############################################################################
 
 
-set(CPACK_PACKAGE_NAME "biceps")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A Novel Error Tolerant Search Strategy for Cross-Species Proteomics")
+  set(CPACK_PACKAGE_NAME "biceps")
+  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A Novel Error Tolerant Search Strategy for Cross-Species Proteomics")
 
 
 # CPack version strings
@@ -103,17 +113,17 @@ SET(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
 SET(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
 SET(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
 
-SET(CPACK_RESOURCE_FILE_README "${BICEPS_SOURCE_DIR}/README.txt")
-SET(CPACK_RESOURCE_FILE_LICENSE "${BICEPS_SOURCE_DIR}/LICENSE.txt")
+  SET(CPACK_RESOURCE_FILE_README "${BICEPS_SOURCE_DIR}/README.txt")
+  SET(CPACK_RESOURCE_FILE_LICENSE "${BICEPS_SOURCE_DIR}/LICENSE.txt")
 
 set(CPACK_COMPONENTS_ALL libraries headers applications models documentation)
-set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "Application")
-set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "C++ Interface Documentation")
+  set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "Application")
+  set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "C++ Interface Documentation")
 
-set(CPACK_COMPONENT_APPLICATIONS_DESCRIPTION
-    "The BICEPS executable.")
-set(CPACK_COMPONENT_DOCUMENTATION_DESCRIPTION
-    "The BICEPS documentation (Doxygen).")
+  set(CPACK_COMPONENT_APPLICATIONS_DESCRIPTION
+      "The BICEPS executable.")
+  set(CPACK_COMPONENT_DOCUMENTATION_DESCRIPTION
+      "The BICEPS documentation (Doxygen).")
 
 INCLUDE(CPack)
 

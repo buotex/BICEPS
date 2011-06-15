@@ -11,7 +11,6 @@ void Model::read_model(const char* name, bool silent_ind)
 	char file[256];
 
 	model_name = name;
-
 	if (config.get_resource_dir().length()<2)
 	{
 		config.set_resource_dir("Models");

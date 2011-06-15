@@ -1,61 +1,62 @@
+include_directories(${BICEPS_BINARY_DIR}/libs/pepnovo ${CMAKE_CURRENT_SOURCE_DIR})
 set( PEPNOVO_SRCS
-        AdvancedScoreModel.cpp
-        AdvancedScoreModel_fill.cpp
-        AdvancedScoreModel_frag.cpp
-        AdvancedScoreModel_regional.cpp
-        AminoAcidProbs.cpp
-        AnnotatedSpectrum.cpp
-        BasicDataStructs.cpp
-        Config.cpp
-        ConversionTables.cpp
-        DeNovoDp.cpp
-        DeNovoPartModel.cpp
-        DeNovoRankScore.cpp
-        DeNovoRankTrain.cpp
-        DeNovoSolutions.cpp
-        DiscretePeakModel.cpp
-        EdgeModel.cpp
-        FileManagement.cpp
-        FragProbTable.cpp
-        FragmentSelection.cpp
-        Fragmentation.cpp
-	Isotopes.cpp
-	ME_REG.cpp
-	ME_Regression_DataSet.cpp
-	ME_Regression_Model.cpp
-	MZXML_parsing.cpp
-	MassRangeMap.cpp
-	Model.cpp
-	MultiPath.cpp
-	PMCSQS.cpp
-	PMCSQS_model.cpp
-	PMC_rank.cpp
-	PTM_stuff.cpp
-	PartitionModel.cpp
-	PeakRankModel.cpp
-	PeakRankPartialDenovo.cpp
-	PeakRank_advanced.cpp
-	PeakRank_combined.cpp
-	PeakRank_combined_dnv.cpp
-	PeakRank_simple.cpp
-	#PepNovo_main.cpp
-	Pepnovo.cpp
-	PeptideComp.cpp
-	PrmGraph.cpp
-	QCBasicSpecReader.cpp
-	QCDAT.cpp
-	QCDotProdSim.cpp
-	QCoutputter.cpp
-	QuickClustering.cpp
-	QuickClusteringSpectra.cpp
-	RankBoost.cpp
-	RankBoostSample.cpp
-	ReScoreDB.cpp
-	RegionalPepNovoModel.cpp
-	RegularRankModel.cpp
-	Spectrum.cpp
-	auxfun.cpp
-	base64.cpp
+    AdvancedScoreModel.cpp
+    AdvancedScoreModel_fill.cpp
+    AdvancedScoreModel_frag.cpp
+    AdvancedScoreModel_regional.cpp
+    AminoAcidProbs.cpp
+    AnnotatedSpectrum.cpp
+    BasicDataStructs.cpp
+    Config.cpp
+    ConversionTables.cpp
+    DeNovoDp.cpp
+    DeNovoPartModel.cpp
+    DeNovoRankScore.cpp
+    DeNovoRankTrain.cpp
+    DeNovoSolutions.cpp
+    DiscretePeakModel.cpp
+    EdgeModel.cpp
+    FileManagement.cpp
+    FragProbTable.cpp
+    FragmentSelection.cpp
+    Fragmentation.cpp
+Isotopes.cpp
+ME_REG.cpp
+ME_Regression_DataSet.cpp
+ME_Regression_Model.cpp
+MZXML_parsing.cpp
+MassRangeMap.cpp
+Model.cpp
+MultiPath.cpp
+PMCSQS.cpp
+PMCSQS_model.cpp
+PMC_rank.cpp
+PTM_stuff.cpp
+PartitionModel.cpp
+PeakRankModel.cpp
+PeakRankPartialDenovo.cpp
+PeakRank_advanced.cpp
+PeakRank_combined.cpp
+PeakRank_combined_dnv.cpp
+PeakRank_simple.cpp
+#PepNovo_main.cpp
+Pepnovo.cpp
+PeptideComp.cpp
+PrmGraph.cpp
+QCBasicSpecReader.cpp
+QCDAT.cpp
+QCDotProdSim.cpp
+QCoutputter.cpp
+QuickClustering.cpp
+QuickClusteringSpectra.cpp
+RankBoost.cpp
+RankBoostSample.cpp
+ReScoreDB.cpp
+RegionalPepNovoModel.cpp
+RegularRankModel.cpp
+Spectrum.cpp
+auxfun.cpp
+base64.cpp
 
-    )
+  )
 ADD_LIBRARY(pepnovo STATIC ${PEPNOVO_SRCS})

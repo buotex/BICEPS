@@ -26,15 +26,20 @@ distribution packages. Bundling \c libfbi requires a working CMake build system
 
 With cmake in the system path, the build process is
 \verbatim
+ Either
  tar xvzf biceps-xxxxxxx.tar.gz
+ or
+ git clone git://github.com/buote/BICEPS.git
+
  mkdir biceps
  cd biceps
  ccmake ../biceps
- make
+ make && sudo make install
 \endverbatim
-And, optionally:
 \verbatim
- make package
+ Example line:
+ biceps --mgf pickedpeaks_no_pp_Helatest_with_none_resultRawList.mgf --fasta ipi.CHICK.v3.54.fasta 
+ For other parameters, just execute biceps.
 \endverbatim
 */
 
