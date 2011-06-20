@@ -13,12 +13,12 @@ include_directories(${Boost_INCLUDE_DIRS})
   link_directories (${PROJECT_SOURCE_DIR}/src "${PROJECT_SOURCE_DIR}/libs/pepsplice" "${PROJECT_SOURCE_DIR}/libs/pepnovo" "${PROJECT_SOURCE_DIR}/libs/directag/directag" "${PROJECT_SOURCE_DIR}/libs" ${DIRECTAG_SRC_DIRS} "${PROJECT_SOURCE_DIR}/libs/gmm-bic")
 #add_library(ets main.cpp fasta.cpp fasta.h)
 
-if(WIN32)
+if(MSVC)
   SET(
       WIN32_ONLY_LIBS
       thermo
      )
-ELSE(WIN32)
+ELSE(MSVC)
   SET(
       WIN32_ONLY_LIBS
      )
@@ -27,7 +27,7 @@ ELSE(WIN32)
       pthread
      )
 
-ENDIF(WIN32)
+ENDIF(MSVC)
 
   IF(HAVE_PEPNOVO)
 ADD_DEFINITIONS(-DHAVE_PEPNOVO)

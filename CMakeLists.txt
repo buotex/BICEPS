@@ -1,31 +1,31 @@
 cmake_minimum_required(VERSION 2.4.7)
-cmake_policy(SET CMP0003 NEW)
-cmake_policy(SET CMP0015 NEW)
-project(BICEPS)
+  cmake_policy(SET CMP0003 NEW)
+  cmake_policy(SET CMP0015 NEW)
+  project(BICEPS)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_MULTITHREADED ON)
-set(CMAKE_IS_EXPERIMENTAL YES_I_KNOW)
+  set(Boost_USE_STATIC_LIBS ON)
+  set(Boost_USE_MULTITHREADED ON)
+  set(CMAKE_IS_EXPERIMENTAL YES_I_KNOW)
 find_package(Boost COMPONENTS filesystem system regex program_options iostreams serialization thread REQUIRED)
 #############################################################################
 # build libraries
 #############################################################################
 
 
-OPTION(HAVE_PEPNOVO "ON, if you want to install and use Pepnovo"
-	ON)
-OPTION(HAVE_DIRECTAG "ON, if you want to install and use Directag"
-	ON)
+  OPTION(HAVE_PEPNOVO "ON, if you want to install and use Pepnovo"
+      ON)
+  OPTION(HAVE_DIRECTAG "ON, if you want to install and use Directag"
+      ON)
 
 
-INCLUDE (CheckIncludeFiles)
-CHECK_INCLUDE_FILES(unistd.h HAVE_UNISTD)
-IF(HAVE_UNISTD)
-	ADD_DEFINITIONS(-DHAVE_UNISTD_H=${HAVE_UNISTD})
+  INCLUDE (CheckIncludeFiles)
+  CHECK_INCLUDE_FILES(unistd.h HAVE_UNISTD)
+  IF(HAVE_UNISTD)
+ADD_DEFINITIONS(-DHAVE_UNISTD_H=${HAVE_UNISTD})
 ENDIF(HAVE_UNISTD)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+  set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 
 #CHECK_INCLUDE_FILES(tcmalloc.h HAVE_TCMALLOC)
@@ -34,35 +34,35 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 #ENDIF(HAVE_TCMALLOC)
 
 
-INCLUDE (CheckFunctionExists)
-CHECK_FUNCTION_EXISTS(memmove HAVE_MEMMOVE)
-IF(HAVE_MEMMOVE)
-	ADD_DEFINITIONS(-DHAVE_MEMMOVE=${HAVE_MEMMOVE})
+  INCLUDE (CheckFunctionExists)
+  CHECK_FUNCTION_EXISTS(memmove HAVE_MEMMOVE)
+  IF(HAVE_MEMMOVE)
+ADD_DEFINITIONS(-DHAVE_MEMMOVE=${HAVE_MEMMOVE})
 ENDIF(HAVE_MEMMOVE)
 
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING
       "Choose the type of build, options are: Debug Release
-RelWithDebInfo MinSizeRel."
+      RelWithDebInfo MinSizeRel."
       FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
-SET(CMAKE_CXX0X_FLAGS "-std=c++0x" )
 # more warnings against everything
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-sign-compare -Wno-sign-conversion " )
 if(NOT MSVC)
+  SET(CMAKE_CXX0X_FLAGS "-std=c++0x" )
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-sign-compare -Wno-sign-conversion " )
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX0X_FLAGS}" )
-  endif(NOT MSVC)
+endif(NOT MSVC)
 
 set(BICEPS_MODEL_PATH ${CMAKE_INSTALL_PREFIX}/bin/Models)
 
-CONFIGURE_FILE(
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/pepnovo/Config.h.cmake 
-    ${BICEPS_BINARY_DIR}/libs/pepnovo/Config.h
-)
+  CONFIGURE_FILE(
+      ${CMAKE_CURRENT_SOURCE_DIR}/libs/pepnovo/Config.h.cmake 
+      ${BICEPS_BINARY_DIR}/libs/pepnovo/Config.h
+      )
 
-add_subdirectory(libs)
+  add_subdirectory(libs)
 add_subdirectory(src)
 
 
@@ -78,7 +78,7 @@ add_subdirectory(src)
 FIND_PACKAGE(Doxygen)
 
 # target for doxygen
-IF(DOXYGEN_FOUND)
+  IF(DOXYGEN_FOUND)
 ADD_CUSTOM_TARGET(doc COMMAND ${DOXYGEN} ${BICEPS_BINARY_DIR}/doc/Doxyfile)
 ENDIF(DOXYGEN_FOUND)
 
