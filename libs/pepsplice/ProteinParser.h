@@ -39,6 +39,7 @@
 #include <vector>
 #include <stdexcept>
 #include <sstream>
+#include <tuple>
 using namespace std;
 namespace Pepsplice{
 class ProteinParser
@@ -55,10 +56,10 @@ public:
     vector<string> * oldSequences;
     
 //	void parseFASTA(const char* file);
-    void parseFASTA(const map<string,string> & currentfasta);    
+    void parseFASTA(const std::vector<std::tuple<unsigned int, std::string, std::string> > & currentfasta);    
 	void finishProtein();
 	void generateTuples();
-	void doAnotherRun(const map<string,string> & currentfasta);
+	void doAnotherRun(const std::vector<std::tuple<unsigned int, std::string, std::string> > & currentfasta);
 	unsigned char* getAASeqChar(string seq);
 	
 };

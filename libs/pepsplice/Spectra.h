@@ -32,6 +32,7 @@
 #include <vector>
 #include <map>
 #include <fstream>
+#include <tuple>
 #include "Spectrum.h"
 #include "Services.h"
 #include "Distribution.h"
@@ -70,7 +71,7 @@ public:
     ///Handles the results which will be written to files/memory
 	Results *results1;
     
-    const map<string,string> * currentfasta;
+    const std::vector<std::tuple<unsigned int, std::string, std::string> >* currentfasta;
     vector<string> * oldSequences;
     ///This function parses the spectrum
 	void addSpectrum(Spectrum *spectrum1);

@@ -49,12 +49,13 @@
 #include "HotSpectra.h"
 #include <vector> //Added by BX, needed for max_penalties and sequences_array.
 #include <stdexcept>
+#include <tuple>
 
 namespace Pepsplice{
 	///the pepsplice main function, it should use the pepsplice_options
 	///given by the ets main function and fill the PepspliceResult vector
 	
-	void pepsplice_func(int argc, vector<string> & pepsplice_options, float penalty_mutation, std::vector<float> & max_penalties, std::vector<PepspliceResult>& results, const map<string,string> & currentfasta);
+	void pepsplice_func(int argc, vector<string> & pepsplice_options, float penalty_mutation, std::vector<float> & max_penalties, std::vector<PepspliceResult>& results, const std::vector<std::tuple<unsigned int, std::string, std::string> > & currentfasta);
 }
 
 #endif

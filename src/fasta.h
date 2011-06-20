@@ -8,7 +8,12 @@
 #include <fstream>
 #include <cmath>
 #include <algorithm>
+#include <tuple>
+
 #include "pepsplice.h"
+
+
+using Pepsplice::PepspliceResult;
 
 using namespace std;
 
@@ -56,17 +61,17 @@ ostream & operator<< ( ostream & os, Tag & tag);
  *
  * Creating: Pepsplice, another library which is used in the BICEPS program, needs fasta-databases to find AA-sequences.
  * As generic databases are too big to provide results in a reasonable time, a smaller customized one is more viable and will thus be created by the <tt>createFasta</tt>-method.
- * The result, a <tt>map<string, string></tt> containing modified and unmodified subsequences can then be processed by pepsplice.
+ * The result, a <tt>std::vector<std::tuple<unsigned int, std::string, std::string> ></tt> containing modified and unmodified subsequences can then be processed by pepsplice.
  *
  *
  *
- * @retval Output will be a fasta map<string, string> in the <mutated tagstring, original tagstring> format.
+ * @retval Output will be a fasta std::vector<std::tuple<unsigned int, std::string, std::string> > in the <mutated tagstring, original tagstring> format.
  *
  * Example Usage:
  * @code
  *
  * vector<Tag> tagbuffer;
- * map<string, string> pepnFasta;
+ * std::vector<std::tuple<unsigned int, std::string, std::string> > pepnFasta;
  *
  * Fasta fasta;
  * fasta.loadBigFasta("ipi.CHICK.fasta");
@@ -99,7 +104,7 @@ class Fasta
       \param[in] tags the tag-vector containing the tags to search for
       \param[out] currentFasta this will save all the matching-results
      */
-    void createFasta(const bool mutated, const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, map<string, string> & currentFasta);
+    void createFasta(const bool mutated, const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, std::vector<std::tuple<unsigned int, std::string, std::string> >& currentFasta);
 
     ///loadBigFasta needs the filename (as a std::string) of the fastafile, it will then call some private functions.
 
@@ -142,6 +147,8 @@ class Fasta
     ///public interface
     unsigned int getNumTags(){ return this->pepntags.size() + this->directags.size();}
 
+    void matchSequences(PepspliceResult & pepresult, const std::vector<std::tuple<unsigned int, std::string, std::string> >& currentFasta);
+
 
     private:
 
@@ -157,7 +164,7 @@ class Fasta
       \param[out] currentFasta this will save all the matching-results
       \retval string mutated substring which matches the tag, with padding on both sides and with optional mutations
      */
-    std::string cutSequence(const Tag & tag, const unsigned int sequence_id, const unsigned int posTag, const int mutated, map<string, string> & currentFasta);
+    std::string cutSequence(const Tag & tag, const unsigned int sequence_id, const unsigned int posTag, const int mutated, std::vector<std::tuple<unsigned int, std::string, std::string> > & currentFasta);
 
     /**calculating the index of a Tag, if begin ==1 it uses the first two AAs, otherwise it's the last two, helper function to search faster for tags.
 
@@ -184,7 +191,7 @@ class Fasta
     \param[in] tags the tag-vector to search for
     \param[out] currentFasta this will save all the matching-results 
     */
-    void findTags2(const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, map<string, string> & currentFasta);
+    void findTags2(const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, std::vector<std::tuple<unsigned int, std::string, std::string> > & currentFasta);
 
 
     ///this function searches for partial matches (up to 1 differing AA) between given tags and the previously loaded Fasta.
@@ -196,7 +203,7 @@ class Fasta
     \param[in] tags the tag-vector to search for
     \param[out] currentFasta this will save all the matching-results 
     */ 
-    void findMutatedTags2(const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, map<string, string> & currentFasta);
+    void findMutatedTags2(const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, std::vector<std::tuple<unsigned int, std::string, std::string> > & currentFasta);
 
 
     ///switch-case for getting the mass of a specific AA, should be fastest solution with jump-table

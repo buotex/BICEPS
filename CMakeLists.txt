@@ -8,6 +8,10 @@ set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 set(CMAKE_IS_EXPERIMENTAL YES_I_KNOW)
 find_package(Boost COMPONENTS filesystem system regex program_options iostreams serialization thread REQUIRED)
+#############################################################################
+# build libraries
+#############################################################################
+
 
 OPTION(HAVE_PEPNOVO "ON, if you want to install and use Pepnovo"
 	ON)
@@ -36,6 +40,7 @@ IF(HAVE_MEMMOVE)
 	ADD_DEFINITIONS(-DHAVE_MEMMOVE=${HAVE_MEMMOVE})
 ENDIF(HAVE_MEMMOVE)
 
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING
       "Choose the type of build, options are: Debug Release
@@ -43,6 +48,12 @@ RelWithDebInfo MinSizeRel."
       FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
+SET(CMAKE_CXX0X_FLAGS "-std=c++0x" )
+# more warnings against everything
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-sign-compare -Wno-sign-conversion " )
+if(NOT MSVC)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX0X_FLAGS}" )
+  endif(NOT MSVC)
 
 set(BICEPS_MODEL_PATH ${CMAKE_INSTALL_PREFIX}/bin/Models)
 

@@ -170,7 +170,7 @@ float Fasta::calcWeight(const string& tag) const
 }
 
 
-void Fasta::createFasta(const bool mutated, const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, map<string, string> & currentFasta)
+void Fasta::createFasta(const bool mutated, const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, std::vector<std::tuple<unsigned int, std::string, std::string> > & currentFasta)
 {
     unsigned int numlasttag;
     if (debuglevel > 1) this->outfile.open("etsresults.fasta", fstream::trunc | ios::binary);
@@ -272,7 +272,7 @@ void Fasta::indexFasta()
 
 
 
-string Fasta::cutSequence(const Tag & tag, const unsigned int sequence_id, const unsigned int posTag, const int mutated, map<string, string> & currentFasta)
+string Fasta::cutSequence(const Tag & tag, const unsigned int sequence_id, const unsigned int posTag, const int mutated, std::vector<std::tuple<unsigned int, std::string, std::string> > & currentFasta)
 {
     const string & sequence = bigfasta[sequence_id];
     //as tag.minAvePoss represents the average amount of mass before the tag occurs in a sequence
@@ -305,14 +305,14 @@ string Fasta::cutSequence(const Tag & tag, const unsigned int sequence_id, const
             
             ///This index-list will save the occurence of the tag in the original fasta.
             const string result = this->bigfasta[sequence_id].substr(minPossTag, maxPossTag - minPossTag);
-            currentFasta[result] = result;
+            currentFasta.push_back(std::make_tuple(sequence_id, result, result));
             return result;
         }
         // return sequence.substr(minPossTag,posTag-minPossTag) + tag.tag + sequence.substr(posTag + tagLength, maxPossTag - tagLength - posTag);
         else 
         {
             const string result = this->bigfasta[sequence_id].substr(minPossTag,posTag-minPossTag + mutated) + tag.tag.substr(mutated,1) + this->bigfasta[sequence_id].substr(posTag + mutated+ 1, maxPossTag-posTag-mutated-1);
-            currentFasta[result] = this->bigfasta[sequence_id].substr(minPossTag, maxPossTag - minPossTag);
+            currentFasta.push_back(std::make_tuple(sequence_id, result, this->bigfasta[sequence_id].substr(minPossTag, maxPossTag - minPossTag)));
             return result;
         }
     }
@@ -332,7 +332,7 @@ string Fasta::cutSequence(const Tag & tag, const unsigned int sequence_id, const
 }
 
 
-void Fasta::findTags2(const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, map<string, string> & currentFasta)
+void Fasta::findTags2(const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, std::vector<std::tuple<unsigned int, std::string, std::string> > & currentFasta)
 {
     vector<unsigned int> prefixes;
     vector<vector<unsigned int> >tagnums;
@@ -390,7 +390,7 @@ void Fasta::findTags2(const unsigned int tagsbegin, const unsigned int tagsend, 
 
 
 
-void Fasta::findMutatedTags2(const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, map<string, string> & currentFasta)
+void Fasta::findMutatedTags2(const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, std::vector<std::tuple<unsigned int, std::string, std::string> > & currentFasta)
 {
     
 
@@ -541,5 +541,19 @@ void Fasta::findMutatedTags2(const unsigned int tagsbegin, const unsigned int ta
     
     
 }
+
+
+void Fasta::matchSequences(PepspliceResult & pepresult, const std::vector<std::tuple<unsigned int, std::string, std::string> >& currentFasta) 
+{
+  for (size_t i = 0; i < currentFasta.size(); ++i)
+  {
+    if (std::get<1>(currentFasta[i]).find(pepresult.OrigSequence) != std::string::npos)
+    {
+      pepresult.fastaIds.push_back(std::get<0>(currentFasta[i]));    
+    }
+  }
+}
+
+
 
 

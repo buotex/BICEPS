@@ -22,7 +22,7 @@ namespace Pepsplice{
   
   
   
-  void ProteinParser::parseFASTA(const map<string,string> & currentfasta)
+  void ProteinParser::parseFASTA(const std::vector<std::tuple<unsigned int, std::string, std::string> > & currentfasta)
   {
     
     if (oldSequences != 0) delete oldSequences;
@@ -30,14 +30,14 @@ namespace Pepsplice{
     oldSequences = new vector<string>;
     proteincount = 0;
     oldSequenceCount = 0;
-    map<string, string >::const_iterator it;
+    std::vector<std::tuple<unsigned int, std::string, std::string> >::const_iterator it;
     //BX: second is the original sequence, first the modified sequence
     try
     {
       for (it = currentfasta.begin(); it != currentfasta.end(); ++it)
       {
-        currentprotein = new Protein(it->second, it->first);
-        if (se1->outputlevel>2) {se1->os << it->second << " " << it->first << '\n';}
+        currentprotein = new Protein(std::get<2>(*it), std::get<1>(*it));
+        if (se1->outputlevel>2) {se1->os << std::get<2>(*it)<< " " << std::get<1>(*it) << '\n';}
         
         finishProtein();
         delete currentprotein;
@@ -126,7 +126,7 @@ namespace Pepsplice{
     
   }
   
-  void ProteinParser::doAnotherRun(const  map<string,string> & currentfasta) //added by BX, using old buffered tuples to improve speed
+  void ProteinParser::doAnotherRun(const std::vector<std::tuple<unsigned int, std::string, std::string> > & currentfasta) //added by BX, using old buffered tuples to improve speed
   { 
     
     se1->tuples = 0;

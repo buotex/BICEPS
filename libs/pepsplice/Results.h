@@ -70,33 +70,35 @@ public:
 
 class PepspliceResult
 {
-public:
-    
-	string Sequence;
-	string OrigSequence;
-	//unsigned int seqid;
+  public:
+
+    string Sequence;
+    string OrigSequence;
+    //unsigned int seqid;
     int n;
-	int k;
-	float bic;
-	float score;
+    int k;
+    float bic;
+    float score;
     float penalty;
     bool tool;
     float penalty_max;
     bool mutation;
-//    list<unsigned int> * seqIds;
-    
+    std::list<unsigned int> fastaIds;
+    //    list<unsigned int> * seqIds;
+
     PepspliceResult():Sequence(""),OrigSequence(""),n(0),k(0),bic(-99999.0f),score(0.0f),penalty(0.0f){}
     void reset(){
-        Sequence ="";
-        OrigSequence="";
-        //seqid=0;
-        n=0;
-        k=0;
-        bic=-99999.0f;
-        score=0.0f;
-        penalty=0.0f;
+      Sequence ="";
+      OrigSequence="";
+      //seqid=0;
+      n=0;
+      k=0;
+      bic=-99999.0f;
+      score=0.0f;
+      penalty=0.0f;
+      fastaIds.clear();
     }
-    
+
 };
 
 ostream& operator << (ostream& os, const PepspliceResult& pep);
@@ -104,8 +106,8 @@ ostream& operator << (ostream& os, const PepspliceResult& pep);
 
 struct PepspliceResultComparator
 { //TODO the Match version is derived from public binary_function<Match, Match, bool>, use that approach when this breaks.
-	bool operator()(const PepspliceResult a, const PepspliceResult b) const
-		{return b.bic < a.bic;}
+  bool operator()(const PepspliceResult a, const PepspliceResult b) const
+  {return b.bic < a.bic;}
 };
 
 } //namespace

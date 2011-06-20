@@ -1,4 +1,6 @@
+#include <tuple>
 #include "biceps.h"
+
 const double PI = 3.14159265;
 
 
@@ -550,22 +552,24 @@ PepspliceResult Biceps::runPepsplice(bool mutation, int pepN1, int pepN2,  int d
 #ifdef HAVE_PEPNOVO
     if (this->genOp.tool == PEPNOVO || this->genOp.tool == PEPNDIREC)
     {
-        map<string, string> pepnFasta; //We will use this to keep the fasta created by the Fasta class.
+        std::vector<std::tuple<unsigned int, std::string, std::string> > pepnFasta; //We will use this to keep the fasta created by the Fasta class.
         fasta.createFasta(mutation,pepN1,pepN2, fasta.pepntags, pepnFasta); 
         if ( fasta.getMatches() > 0) 
         {
             Pepsplice::pepsplice_func(pepsOp.size(),pepsOp,penalty_mutation, pepsplice_penalties, pepnresults, pepnFasta); //< this should fill the results and the fastaoutput vector.
+            fasta.matchSequences(pepnresults[0], pepnFasta);
         }        
     }
 #endif
 #ifdef HAVE_DIRECTAG
     if (this->genOp.tool == DIRECTAG || this->genOp.tool == PEPNDIREC)
     {
-        map<string, string> direcFasta; //We will use this to keep the fasta created by the Fasta class.
+        std::vector<std::tuple<unsigned int, std::string, std::string> > direcFasta; //We will use this to keep the fasta created by the Fasta class.
         fasta.createFasta(mutation,dirN1, dirN2, fasta.directags, direcFasta); 
         if ( fasta.getMatches() > 0) 
         {
             Pepsplice::pepsplice_func(pepsOp.size(),pepsOp,penalty_mutation, pepsplice_penalties, direcresults, direcFasta); //< this should fill the results and the fastaoutput vector.
+            fasta.matchSequences(direcresults[0], direcFasta);
         }
     }
 #endif
@@ -588,9 +592,14 @@ int Biceps::writeResult(std::ostream & os, const Pepsplice::PepspliceResult & re
 {
     os << specIndex << "\n";
     os << "Title=" << title << "\n";
-
     os << "Sequence: " << convertTupleString(res.Sequence) << "\n";
     os << "OrigSequence: " << res.OrigSequence << "\n";   
+    for (std::list<unsigned int>::const_iterator it = res.fastaIds.begin(); it != res.fastaIds.end(); ++it){
+      os << "fastaId: " << *it << "\n";
+      os << "fastaId: " << fasta.offerDescription(*it) << "\n";
+    }
+
+
     os << "n: " << res.n << "\n";
     os << "k: " << res.k << "\n";
     os << "bic: " << res.bic << "\n";

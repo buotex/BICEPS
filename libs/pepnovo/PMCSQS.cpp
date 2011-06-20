@@ -838,7 +838,7 @@ void PMCSQS_Scorer::fill_fval_vector_with_SQS(const BasicSpectrum& bs,
 		int frag_charge;
 		for (frag_charge=1; frag_charge<=2; frag_charge++)
 		{
-			const mass_t offsets[3]={MASS_H2O/frag_charge, MASS_NH3/frag_charge, MASS_CO/frag_charge};
+			const mass_t offsets[3]={(float)MASS_H2O/frag_charge, (float) MASS_NH3/frag_charge, (float)MASS_CO/frag_charge};
 			const int num_offsets = 3;
 			
 			const int fc_off = (frag_charge-1)*num_offsets * 2;

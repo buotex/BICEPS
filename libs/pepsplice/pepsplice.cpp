@@ -5,7 +5,7 @@ namespace Pepsplice{
     extern Pool<Pepsplice::Tuple, POOLSIZE> __POOL__;    
     
     Pool<Pepsplice::Tuple, POOLSIZE> __POOL__ = Pool<Pepsplice::Tuple, POOLSIZE>();
-    void pepsplice_func(int argc, vector<string> & argv, float penalty_mutation_, std::vector<float> & max_penalties, std::vector<PepspliceResult>& results, const map<string,string> & currentfasta){
+    void pepsplice_func(int argc, vector<string> & argv, float penalty_mutation_, std::vector<float> & max_penalties, std::vector<PepspliceResult>& results, const std::vector<std::tuple<unsigned int, std::string, std::string> >& currentfasta){
         try{
             __POOL__.reinit();
             //begin changes BX   
