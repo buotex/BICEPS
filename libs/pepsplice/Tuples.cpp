@@ -322,7 +322,6 @@ namespace Pepsplice{
             }
         }
         tuples->clear();
-        
         if (se1->outputlevel > 0) se1->suggestProgressReport();
         
         //optionally adapt tuple buffer

@@ -173,455 +173,457 @@ void Services::incrementTuples(bool israndom){
 	}else{
 		realtuples++;
 	}
-	if(tuples == triggertuple){
-		suggestProgressReport();
-		triggertuple += 1000;
-	}
+  if (this->outputlevel > 1){
+    if(tuples == triggertuple){
+      suggestProgressReport();
+      triggertuple += 1000;
+    }
+  }
 }
 
 
 void Services::incrementMatches(){
-	matches++;
-	if(matches == triggermatch){
-		suggestProgressReport();
-		triggermatch += 1000;
-	}
+  matches++;
+  if(matches == triggermatch){
+    suggestProgressReport();
+    triggermatch += 1000;
+  }
 }
 
 void Services::incrementSpectra(){
-	spectra++;
-	if(spectra % 20 == 0) if (this->outputlevel > 2) cout << "." << flush;
-	if(spectra % 1000 == 0) if (this->outputlevel > 2) cout << "\n" << spectra << "\ttime[s]:" << globaltime->timeSinceStart() << "\t" << flush;
+  spectra++;
+  if(spectra % 20 == 0) if (this->outputlevel > 2) cout << "." << flush;
+  if(spectra % 1000 == 0) if (this->outputlevel > 2) cout << "\n" << spectra << "\ttime[s]:" << globaltime->timeSinceStart() << "\t" << flush;
 }
 
 
 void Services::invertLearnedPeakDistribution()
 {
-	//normalize area of raw getTotal to 1.00
-	double sum0 = peakdistribution_rel->sumSeries(0);
-	for(int i = 0; i < peakdistribution_rel->length; i++){
-		peakdistribution_rel->setBinValue(1, i, peakdistribution_rel->getBinValue(0, i)/sum0);
-	}
-	
-	//invert normalized distribution
-	for(int i = 0; i < peakdistribution_rel->length; i++){
-		peakdistribution_rel->setBinValue(2, i, 1/(peakdistribution_rel->getBinValue(1, i) + 0.0005));
-	}
+  //normalize area of raw getTotal to 1.00
+  double sum0 = peakdistribution_rel->sumSeries(0);
+  for(int i = 0; i < peakdistribution_rel->length; i++){
+    peakdistribution_rel->setBinValue(1, i, peakdistribution_rel->getBinValue(0, i)/sum0);
+  }
 
-	//normalize inverted distribution
-	double sum2 = peakdistribution_rel->sumSeries(2);
-	for(int i = 0; i < peakdistribution_rel->length; i++){
-		peakdistribution_rel->setBinValue(3, i, peakdistribution_rel->getBinValue(2, i)/sum2);
-	}
+  //invert normalized distribution
+  for(int i = 0; i < peakdistribution_rel->length; i++){
+    peakdistribution_rel->setBinValue(2, i, 1/(peakdistribution_rel->getBinValue(1, i) + 0.0005));
+  }
+
+  //normalize inverted distribution
+  double sum2 = peakdistribution_rel->sumSeries(2);
+  for(int i = 0; i < peakdistribution_rel->length; i++){
+    peakdistribution_rel->setBinValue(3, i, peakdistribution_rel->getBinValue(2, i)/sum2);
+  }
 
 }
 
 void Services::incrementNucleotides(){
-	nucleotides++;
-	if(nucleotides == triggernucleotide) suggestProgressReport();
-	triggernucleotide += 1000;
+  nucleotides++;
+  if(nucleotides == triggernucleotide) suggestProgressReport();
+  triggernucleotide += 1000;
 }
 
-void Services::suggestProgressReport(){ //deactivated ProgressReport by BX
+void Services::suggestProgressReport(){ 
 
   if(globaltime->timeSinceStart() > nexttime && force_tb_report == false){
-    //doProgressReport();
-		//writeLogFiles();
-		nexttime = nexttime * 1.05 + 1;
-	}
+    doProgressReport();
+    //writeLogFiles();
+    nexttime = nexttime * 1.05 + 1;
+  }
 }
 
 void Services::doProgressReport(){
 
-	cout.precision(8);
-	cout << "\n";
-	cout << "t:" << globaltime->timeSinceStart();
-	cout << " N:" << nucleotides << " N/t:" << nucleotides/globaltime->timeSinceStart();
-	cout << " AA:" << aminoacids << " AA/t:" << aminoacids/globaltime->timeSinceStart();
-	cout << " T:" << tuples << " T/s:" << tuples_per_second << " TBuff:" << tuplebuffersize;
-	cout << " M:" << matches << " M/t:" << matches/globaltime->timeSinceStart() << " Sc:" << scores << " Sc/t:" << scores/globaltime->timeSinceStart();
-	if(scorepval == 4 || firstscore == 1) cout << " prpo: " << prescored/postscored;
-	cout << flush;
-	
-	//int n = 0;
-//	reportnumber++;
-//	double gt = globaltime->timeSinceStart();
-//	int diffr = 10; //progress report number
-//	double difft = 0; //time
-//	double ratio = 0; //time
-//	
-//	progressreport->setBinValue(n++, reportnumber, gt);
-//	difft = (progressreport->getBinValue(n-1, reportnumber) - progressreport->getBinValue(n-1, reportnumber - diffr));
-//	progressreport->setBinValue(n++, reportnumber, difft);	
-//	
-//	progressreport->setBinValue(n++, reportnumber, nucleotides);
-//	ratio = (progressreport->getBinValue(n-1, reportnumber) - progressreport->getBinValue(n-1, reportnumber - diffr)) / difft;
-//	progressreport->setBinValue(n++, reportnumber, ratio);	
-//	progressreport->setBinValue(n++, reportnumber, nucleotides/gt);
-//	
-//	progressreport->setBinValue(n++, reportnumber, aminoacids);
-//	ratio = (progressreport->getBinValue(n-1, reportnumber) - progressreport->getBinValue(n-1, reportnumber - diffr)) / difft;
-//	progressreport->setBinValue(n++, reportnumber, ratio);	
-//	progressreport->setBinValue(n++, reportnumber, aminoacids/gt);
-//	
-//	progressreport->setBinValue(n++, reportnumber, tuples);
-//	ratio = (progressreport->getBinValue(n-1, reportnumber) - progressreport->getBinValue(n-1, reportnumber - diffr)) / difft;
-//	progressreport->setBinValue(n++, reportnumber, ratio);	
-//	progressreport->setBinValue(n++, reportnumber, tuples/gt);	
-//	progressreport->setBinValue(n++, reportnumber, tuplebuffersize);
-//	
-//	progressreport->setBinValue(n++, reportnumber, matches);
-//	ratio = (progressreport->getBinValue(n-1, reportnumber) - progressreport->getBinValue(n-1, reportnumber - diffr)) / difft;
-//	progressreport->setBinValue(n++, reportnumber, ratio);	
-//	progressreport->setBinValue(n++, reportnumber, matches/gt);
-//	
-//	progressreport->setBinValue(n++, reportnumber, scores);
-//	ratio = (progressreport->getBinValue(n-1, reportnumber) - progressreport->getBinValue(n-1, reportnumber - diffr)) / difft;
-//	progressreport->setBinValue(n++, reportnumber, ratio);	
-//	progressreport->setBinValue(n++, reportnumber, scores/gt);
-//	
-//	progressreport->writeDistribution(getOutFileName("progressreport"));
-	//cout << " rndT: " << randomtuples << " realT:" << realtuples << flush;
+  cout.precision(8);
+  cout << "\n";
+  cout << "t:" << globaltime->timeSinceStart();
+  cout << " N:" << nucleotides << " N/t:" << nucleotides/globaltime->timeSinceStart();
+  cout << " AA:" << aminoacids << " AA/t:" << aminoacids/globaltime->timeSinceStart();
+  cout << " T:" << tuples << " T/s:" << tuples_per_second << " TBuff:" << tuplebuffersize;
+  cout << " M:" << matches << " M/t:" << matches/globaltime->timeSinceStart() << " Sc:" << scores << " Sc/t:" << scores/globaltime->timeSinceStart();
+  if(scorepval == 4 || firstscore == 1) cout << " prpo: " << prescored/postscored;
+  cout << flush;
+
+  //int n = 0;
+  //	reportnumber++;
+  //	double gt = globaltime->timeSinceStart();
+  //	int diffr = 10; //progress report number
+  //	double difft = 0; //time
+  //	double ratio = 0; //time
+  //	
+  //	progressreport->setBinValue(n++, reportnumber, gt);
+  //	difft = (progressreport->getBinValue(n-1, reportnumber) - progressreport->getBinValue(n-1, reportnumber - diffr));
+  //	progressreport->setBinValue(n++, reportnumber, difft);	
+  //	
+  //	progressreport->setBinValue(n++, reportnumber, nucleotides);
+  //	ratio = (progressreport->getBinValue(n-1, reportnumber) - progressreport->getBinValue(n-1, reportnumber - diffr)) / difft;
+  //	progressreport->setBinValue(n++, reportnumber, ratio);	
+  //	progressreport->setBinValue(n++, reportnumber, nucleotides/gt);
+  //	
+  //	progressreport->setBinValue(n++, reportnumber, aminoacids);
+  //	ratio = (progressreport->getBinValue(n-1, reportnumber) - progressreport->getBinValue(n-1, reportnumber - diffr)) / difft;
+  //	progressreport->setBinValue(n++, reportnumber, ratio);	
+  //	progressreport->setBinValue(n++, reportnumber, aminoacids/gt);
+  //	
+  //	progressreport->setBinValue(n++, reportnumber, tuples);
+  //	ratio = (progressreport->getBinValue(n-1, reportnumber) - progressreport->getBinValue(n-1, reportnumber - diffr)) / difft;
+  //	progressreport->setBinValue(n++, reportnumber, ratio);	
+  //	progressreport->setBinValue(n++, reportnumber, tuples/gt);	
+  //	progressreport->setBinValue(n++, reportnumber, tuplebuffersize);
+  //	
+  //	progressreport->setBinValue(n++, reportnumber, matches);
+  //	ratio = (progressreport->getBinValue(n-1, reportnumber) - progressreport->getBinValue(n-1, reportnumber - diffr)) / difft;
+  //	progressreport->setBinValue(n++, reportnumber, ratio);	
+  //	progressreport->setBinValue(n++, reportnumber, matches/gt);
+  //	
+  //	progressreport->setBinValue(n++, reportnumber, scores);
+  //	ratio = (progressreport->getBinValue(n-1, reportnumber) - progressreport->getBinValue(n-1, reportnumber - diffr)) / difft;
+  //	progressreport->setBinValue(n++, reportnumber, ratio);	
+  //	progressreport->setBinValue(n++, reportnumber, scores/gt);
+  //	
+  //	progressreport->writeDistribution(getOutFileName("progressreport"));
+  //cout << " rndT: " << randomtuples << " realT:" << realtuples << flush;
 }
 
 void Services::writeLogFiles(){
-	//distr_specwithin->writeDistribution("distr_specwithin.txt");
-	//results_desired = true;
+  //distr_specwithin->writeDistribution("distr_specwithin.txt");
+  //results_desired = true;
 }
 
 string Services::getOutFileName(string x){
-	string filename = "";
-	filename += outfileprefix;
-	filename += outfileparams;
-	filename += "_";
-	filename += outfilenumber;
-	filename += x;
-	filename += outfilesuffix;
-	return filename;
+  string filename = "";
+  filename += outfileprefix;
+  filename += outfileparams;
+  filename += "_";
+  filename += outfilenumber;
+  filename += x;
+  filename += outfilesuffix;
+  return filename;
 }
 
 string Services::intToString(int i){
-	std::ostringstream o;
-	o << i;
-	return o.str();
+  std::ostringstream o;
+  o << i;
+  return o.str();
 }
 
 double Services::string_to_double(string s)
 {
-	stringstream stream(s);
-	double b = -1.0;
-	stream >> b;
-	return b;
+  stringstream stream(s);
+  double b = -1.0;
+  stream >> b;
+  return b;
 }
 
 void Services::parseParameters(vector<string> & args)
 {
-	for(unsigned int i = 0; i < args.size(); i++){
-		parseParameter(args[i]);		
-	}
+  for(unsigned int i = 0; i < args.size(); i++){
+    parseParameter(args[i]);		
+  }
 }
 
 void Services::parseParameter(string arg){
-	
-		string argprefix = "";
-		argprefix += arg[1];
-		argprefix += arg[2];
-        
-        if(argprefix == "ol")
-        {
-            outputlevel = (int)string_to_double(arg.substr(3));
-        }
-    
-    
-        //parse parameters
-        if (this->outputlevel > 2) cout << "\nProcessing argument " << arg << flush;
-		
-		//spectrum preprocessing
-		if(argprefix == "aa"){
-			specglobintpeaksper100 = (int)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\n" << specglobintpeaksper100 << " peaks per 100 Dalton are parsed on average.";
-		}
-		if(argprefix == "ab"){
-			specwinintsize = (int)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\nspecwinintsize: " << specwinintsize << flush;				
-		}
-		if(argprefix == "ac"){
-			specwinintpeaks = (int)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\nspecwinintpeaks: " << specwinintpeaks << flush;								
-		}
-		if(argprefix == "ad"){
-			specwinisosize = (int)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\nspecwinisosize: " << specwinisosize << flush;								
-		}
-		if(argprefix == "ae"){
-			specwinisopeaks = (int)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\nspecwinisopeaks: " << specwinisopeaks << flush;												
-		}
 
-		if(argprefix == "bb"){
-			blockedbins = (int)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\nblockedbins: " << blockedbins << flush;												
-		}
+  string argprefix = "";
+  argprefix += arg[1];
+  argprefix += arg[2];
 
-		if(argprefix == "bm"){
-			bestmatches = (int)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\nbestmatches: " << bestmatches << flush;												
-		}
+  if(argprefix == "ol")
+  {
+    outputlevel = (int)string_to_double(arg.substr(3));
+  }
 
-		//bins in score distribution
-		if(argprefix == "bn"){
-			scorebins = (int)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\nscorebins: " << scorebins << flush;												
-		}
 
-		if(argprefix == "bs"){
-			bestseries = (int)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\nbestseries: " << bestseries << flush;												
-		}
+  //parse parameters
+  if (this->outputlevel > 2) cout << "\nProcessing argument " << arg << flush;
 
-		//writing best matches
-		if(argprefix == "bw"){
-			writebestmatches = (bool)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\nwritebestmatches: " << writebestmatches << flush;												
-		}
+  //spectrum preprocessing
+  if(argprefix == "aa"){
+    specglobintpeaksper100 = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\n" << specglobintpeaksper100 << " peaks per 100 Dalton are parsed on average.";
+  }
+  if(argprefix == "ab"){
+    specwinintsize = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nspecwinintsize: " << specwinintsize << flush;				
+  }
+  if(argprefix == "ac"){
+    specwinintpeaks = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nspecwinintpeaks: " << specwinintpeaks << flush;								
+  }
+  if(argprefix == "ad"){
+    specwinisosize = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nspecwinisosize: " << specwinisosize << flush;								
+  }
+  if(argprefix == "ae"){
+    specwinisopeaks = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nspecwinisopeaks: " << specwinisopeaks << flush;												
+  }
 
-		//L2 cache size limitation
-		if(argprefix == "ch"){
-			processorcacheL2 = (int)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\nprocessorcacheL2: " << processorcacheL2 << flush;
-		}
-        
-        //for changed mass 
-        if(argprefix == "cm"){
-            changedMass = true;
-            if (this->outputlevel > 2) cout << "\n using changed Mass for second pass" << flush;
-            }
+  if(argprefix == "bb"){
+    blockedbins = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nblockedbins: " << blockedbins << flush;												
+  }
 
-            
-		//charge state 2
-		if(argprefix == "cs"){
-			chargestate2 = (bool)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\nchargestate2: " << chargestate2 << flush;
-		}
-		
-		//use delta score
-		if(argprefix == "dl"){
-			discriminationscore = (int)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\ndeltascore: " << discriminationscore << flush;
-		}
+  if(argprefix == "bm"){
+    bestmatches = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nbestmatches: " << bestmatches << flush;												
+  }
 
-		//dismiss tuples
-		if(argprefix == "dt"){
-			dismisstuples = (bool)string_to_double(arg.substr(3));
-            if (this->outputlevel > 2) cout << "\ndismisstuples: " << dismisstuples << flush;
-		}
-		
-		//do calculations twice or multiple times in scoring (for timing purposes)
-		if(argprefix == "el"){
-			extraload = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nextraload: " << extraload << flush;
-		}
+  //bins in score distribution
+  if(argprefix == "bn"){
+    scorebins = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nscorebins: " << scorebins << flush;												
+  }
 
-		//probability density cutoff in scoring; filter to save time
-		if(argprefix == "fc"){
-			firstpdfcutoff = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nfirstpdfcutoff: " << firstpdfcutoff << flush;
-		}
-		
-		if(argprefix == "fh"){
-			firstpeaksperhundred = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nfirstpeaksperhundred: " << firstpeaksperhundred << flush;
-		}
-		
-		if(argprefix == "fs"){
-			firstscore = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nfirstscore: " << firstscore << flush;
-		}
+  if(argprefix == "bs"){
+    bestseries = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nbestseries: " << bestseries << flush;												
+  }
 
-		if(argprefix == "gn"){
-			gaplenmin = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\ngaplenmin: " << gaplenmin << flush;
-		}
+  //writing best matches
+  if(argprefix == "bw"){
+    writebestmatches = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nwritebestmatches: " << writebestmatches << flush;												
+  }
 
-		if(argprefix == "gx"){
-			gaplenmax = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\ngaplenmax: " << gaplenmax << flush;
-		}
+  //L2 cache size limitation
+  if(argprefix == "ch"){
+    processorcacheL2 = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nprocessorcacheL2: " << processorcacheL2 << flush;
+  }
 
-		if(argprefix == "hs"){
-			hotspectra = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nhotspectra: " << hotspectra << flush;
-		}
+  //for changed mass 
+  if(argprefix == "cm"){
+    changedMass = true;
+    if (this->outputlevel > 2) cout << "\n using changed Mass for second pass" << flush;
+  }
 
-		if(argprefix == "ht"){
-			hotspottolerance = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nhotspottolerance: " << hotspottolerance << flush;
-		}
-		
-		if(argprefix == "ma"){
-			if (this->outputlevel > 2) cout<< "\nmass_aboveDa as read in:"<<arg.substr(3)<<flush;
-			masstol_aboveDa = string_to_double(arg.substr(3));
-			//updateParentMassTol();
-			if (this->outputlevel > 2) cout << "\nmasstol_aboveDa: " << masstol_aboveDa << flush;
 
-			//changes BYR: added recomputation of masstolerance after reading of the parameters 
-			masstol_below = masstol_belowDa * dnaAA1->scaling_factor; //below means that the theoretical parent mass may be that much below the measured parent mass (see Scoring::scoreTuple pmmin)
-			masstol_above = masstol_aboveDa * dnaAA1->scaling_factor;//Scoring.cpp
-			masstol = masstol_below + masstol_above; //Scoring.
-			safety_margin_disc = ((masstol) / dnaAA1->discretization_factor + 2);
-			//end changes BYR
-		}
+  //charge state 2
+  if(argprefix == "cs"){
+    chargestate2 = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nchargestate2: " << chargestate2 << flush;
+  }
 
-		if(argprefix == "mb"){
-			masstol_belowDa = string_to_double(arg.substr(3));
-			//updateParentMassTol();
-			if (this->outputlevel > 2) cout << "\nmasstol_belowDa: " << masstol_belowDa << flush;
-                       //changes BYR: added recomputation of masstolerance after reading of the parameters
-		       masstol_below = masstol_belowDa * dnaAA1->scaling_factor; //below means that the theoretical parent mass may be that much below the measured parent mass (see Scoring::scoreTuple pmmin)
-		       masstol_above = masstol_aboveDa * dnaAA1->scaling_factor;//Scoring.cpp
-		       masstol = masstol_below + masstol_above; //Scoring.
-		       safety_margin_disc = ((masstol) / dnaAA1->discretization_factor + 2);
-		       //end changes BYR
-		}
-	
-		if(argprefix == "md"){
-			doModifications = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\ndoModifications: " << doModifications << flush;
-		}
-		
-		if(argprefix == "mo"){
-			mod_m16 = (bool)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nmod_m16: " << mod_m16 << flush;
-		}
+  //use delta score
+  if(argprefix == "dl"){
+    discriminationscore = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\ndeltascore: " << discriminationscore << flush;
+  }
 
-		if(argprefix == "mp"){
-			minpepconfidence = 1/1000 * (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nminpepconfidence: " << minpepconfidence << flush;
-		}
+  //dismiss tuples
+  if(argprefix == "dt"){
+    dismisstuples = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\ndismisstuples: " << dismisstuples << flush;
+  }
 
-		if(argprefix == "mu"){
-			mod_s80 = (bool)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nmod_s80: " << mod_s80 << flush;
-		}
+  //do calculations twice or multiple times in scoring (for timing purposes)
+  if(argprefix == "el"){
+    extraload = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nextraload: " << extraload << flush;
+  }
 
-		if(argprefix == "nk"){
-			determineNK = (bool)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\ndetermineNK: " << determineNK << flush;
-		}
+  //probability density cutoff in scoring; filter to save time
+  if(argprefix == "fc"){
+    firstpdfcutoff = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nfirstpdfcutoff: " << firstpdfcutoff << flush;
+  }
 
-		if(argprefix == "np"){
-			noprefixend = (bool)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nnoprefixend: " << noprefixend << flush;
-		}
+  if(argprefix == "fh"){
+    firstpeaksperhundred = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nfirstpeaksperhundred: " << firstpeaksperhundred << flush;
+  }
 
-		if(argprefix == "ns"){
-			nosuffixstart = (bool)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nnosuffixstart: " << nosuffixstart << flush;
-		}
+  if(argprefix == "fs"){
+    firstscore = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nfirstscore: " << firstscore << flush;
+  }
 
-							
-		//choose probability density function or p-value or continuity-corrected p.d.f.
-		if(argprefix == "pv"){
-			scorepval = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nscorepval: " << scorepval << flush;
-		}
+  if(argprefix == "gn"){
+    gaplenmin = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\ngaplenmin: " << gaplenmin << flush;
+  }
 
-		//rearrange spectra
-		if(argprefix == "rs"){
-			rearrangespectra = (bool)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nrearrangespectra: " << rearrangespectra << flush;
-		}
+  if(argprefix == "gx"){
+    gaplenmax = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\ngaplenmax: " << gaplenmax << flush;
+  }
 
-		//rearrange spectra
-		if(argprefix == "rt"){
-			randomtype = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nrandomtype (0=revert except last; 1=no reversion but shift by 1 except last; 2=shift by 2; etc...): " << rearrangespectra << flush;
-		}
+  if(argprefix == "hs"){
+    hotspectra = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nhotspectra: " << hotspectra << flush;
+  }
 
-		if(argprefix == "rw"){
-			writespecpos = (bool)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nwritespecpos: " << writespecpos << flush;
-		}
-		
-		if(argprefix == "rz"){
-			resizeeveryX = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nresizeeveryX: " << resizeeveryX << flush;
-		}
-		
-		//choose scoring: 3 is equivalent to simplified SEQUEST, 4 is equivalent to Sadygov/Yates
-		//scoring 8 includes a page fault for the first peak, scoring 9 does not use the spectrum
-		if(argprefix == "sc"){
-			scoring = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nscoring: " << scoring << flush;
-		}
+  if(argprefix == "ht"){
+    hotspottolerance = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nhotspottolerance: " << hotspottolerance << flush;
+  }
 
-		//enumerate SNPs based on amino acids
-		if(argprefix == "sa"){
-			doSNPaa = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nSNPaa: " << doSNPaa << flush;
-		}
+  if(argprefix == "ma"){
+    if (this->outputlevel > 2) cout<< "\nmass_aboveDa as read in:"<<arg.substr(3)<<flush;
+    masstol_aboveDa = string_to_double(arg.substr(3));
+    //updateParentMassTol();
+    if (this->outputlevel > 2) cout << "\nmasstol_aboveDa: " << masstol_aboveDa << flush;
 
-		//enumerate SNPs based on nucleotides
-		if(argprefix == "sn"){
-			doSNPnt = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nSNPnt: " << doSNPnt << flush;
-		}
-		
-		//splicing on or off
-		if(argprefix == "sp"){
-			spliced = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nspliced: " << spliced << flush;
-		}
+    //changes BYR: added recomputation of masstolerance after reading of the parameters 
+    masstol_below = masstol_belowDa * dnaAA1->scaling_factor; //below means that the theoretical parent mass may be that much below the measured parent mass (see Scoring::scoreTuple pmmin)
+    masstol_above = masstol_aboveDa * dnaAA1->scaling_factor;//Scoring.cpp
+    masstol = masstol_below + masstol_above; //Scoring.
+    safety_margin_disc = ((masstol) / dnaAA1->discretization_factor + 2);
+    //end changes BYR
+  }
 
-		//automatic tuple buffer adaptation
-		if(argprefix == "ta"){
-			adapttuplebuffer = (bool)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nadapttuplebuffer: " << adapttuplebuffer << flush;
-		}
-		
-		//tryptic ends required (2 = fully tryptic, 1 = semi-tryptic, 0 = non-tryptic)
-		if(argprefix == "te"){
-			trypticendsrequired = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\ntrypticendsrequired: " << trypticendsrequired << flush;
-		}
+  if(argprefix == "mb"){
+    masstol_belowDa = string_to_double(arg.substr(3));
+    //updateParentMassTol();
+    if (this->outputlevel > 2) cout << "\nmasstol_belowDa: " << masstol_belowDa << flush;
+    //changes BYR: added recomputation of masstolerance after reading of the parameters
+    masstol_below = masstol_belowDa * dnaAA1->scaling_factor; //below means that the theoretical parent mass may be that much below the measured parent mass (see Scoring::scoreTuple pmmin)
+    masstol_above = masstol_aboveDa * dnaAA1->scaling_factor;//Scoring.cpp
+    masstol = masstol_below + masstol_above; //Scoring.
+    safety_margin_disc = ((masstol) / dnaAA1->discretization_factor + 2);
+    //end changes BYR
+  }
 
-		//force progress report when tuplebuffer is readjusted
-		if(argprefix == "tr"){
-			force_tb_report = (bool)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nforce_tb_report: " << force_tb_report << flush;
-		}
+  if(argprefix == "md"){
+    doModifications = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\ndoModifications: " << doModifications << flush;
+  }
 
-		//tuple-spectrum matching (options 0..3)
-		if(argprefix == "ts"){
-			tupspec = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\ntupspec: " << tupspec << flush;
-		}
+  if(argprefix == "mo"){
+    mod_m16 = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nmod_m16: " << mod_m16 << flush;
+  }
 
-		if(argprefix == "wd"){
-			writespecsubsetasdta = (bool)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nwrite spectrum subset as dta files: " << writespecsubsetasdta << flush;
-		}
+  if(argprefix == "mp"){
+    minpepconfidence = 1/1000 * (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nminpepconfidence: " << minpepconfidence << flush;
+  }
 
-		if(argprefix == "wg"){
-			doWholeGenome = (bool)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nwholegenome: " << doWholeGenome << flush;
-		}
+  if(argprefix == "mu"){
+    mod_s80 = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nmod_s80: " << mod_s80 << flush;
+  }
 
-		if(argprefix == "ws"){
-			writespecsubsetasmgf = (bool)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nwrite spectrum subset as mgf files: " << writespecsubsetasmgf << flush;
-		}
+  if(argprefix == "nk"){
+    determineNK = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\ndetermineNK: " << determineNK << flush;
+  }
 
-		if(argprefix == "wt"){
-			writethspec = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\nwritethspec: " << writethspec << flush;
-		}
-	
-		//use only subset of parsed spectra
-		if(argprefix == "xs"){
-			eachXspec = (int)string_to_double(arg.substr(3));
-			if (this->outputlevel > 2) cout << "\neachXspec: " << eachXspec << flush;
-		}
+  if(argprefix == "np"){
+    noprefixend = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nnoprefixend: " << noprefixend << flush;
+  }
+
+  if(argprefix == "ns"){
+    nosuffixstart = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nnosuffixstart: " << nosuffixstart << flush;
+  }
+
+
+  //choose probability density function or p-value or continuity-corrected p.d.f.
+  if(argprefix == "pv"){
+    scorepval = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nscorepval: " << scorepval << flush;
+  }
+
+  //rearrange spectra
+  if(argprefix == "rs"){
+    rearrangespectra = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nrearrangespectra: " << rearrangespectra << flush;
+  }
+
+  //rearrange spectra
+  if(argprefix == "rt"){
+    randomtype = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nrandomtype (0=revert except last; 1=no reversion but shift by 1 except last; 2=shift by 2; etc...): " << rearrangespectra << flush;
+  }
+
+  if(argprefix == "rw"){
+    writespecpos = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nwritespecpos: " << writespecpos << flush;
+  }
+
+  if(argprefix == "rz"){
+    resizeeveryX = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nresizeeveryX: " << resizeeveryX << flush;
+  }
+
+  //choose scoring: 3 is equivalent to simplified SEQUEST, 4 is equivalent to Sadygov/Yates
+  //scoring 8 includes a page fault for the first peak, scoring 9 does not use the spectrum
+  if(argprefix == "sc"){
+    scoring = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nscoring: " << scoring << flush;
+  }
+
+  //enumerate SNPs based on amino acids
+  if(argprefix == "sa"){
+    doSNPaa = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nSNPaa: " << doSNPaa << flush;
+  }
+
+  //enumerate SNPs based on nucleotides
+  if(argprefix == "sn"){
+    doSNPnt = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nSNPnt: " << doSNPnt << flush;
+  }
+
+  //splicing on or off
+  if(argprefix == "sp"){
+    spliced = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nspliced: " << spliced << flush;
+  }
+
+  //automatic tuple buffer adaptation
+  if(argprefix == "ta"){
+    adapttuplebuffer = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nadapttuplebuffer: " << adapttuplebuffer << flush;
+  }
+
+  //tryptic ends required (2 = fully tryptic, 1 = semi-tryptic, 0 = non-tryptic)
+  if(argprefix == "te"){
+    trypticendsrequired = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\ntrypticendsrequired: " << trypticendsrequired << flush;
+  }
+
+  //force progress report when tuplebuffer is readjusted
+  if(argprefix == "tr"){
+    force_tb_report = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nforce_tb_report: " << force_tb_report << flush;
+  }
+
+  //tuple-spectrum matching (options 0..3)
+  if(argprefix == "ts"){
+    tupspec = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\ntupspec: " << tupspec << flush;
+  }
+
+  if(argprefix == "wd"){
+    writespecsubsetasdta = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nwrite spectrum subset as dta files: " << writespecsubsetasdta << flush;
+  }
+
+  if(argprefix == "wg"){
+    doWholeGenome = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nwholegenome: " << doWholeGenome << flush;
+  }
+
+  if(argprefix == "ws"){
+    writespecsubsetasmgf = (bool)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nwrite spectrum subset as mgf files: " << writespecsubsetasmgf << flush;
+  }
+
+  if(argprefix == "wt"){
+    writethspec = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nwritethspec: " << writethspec << flush;
+  }
+
+  //use only subset of parsed spectra
+  if(argprefix == "xs"){
+    eachXspec = (int)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\neachXspec: " << eachXspec << flush;
+  }
 
 
 }

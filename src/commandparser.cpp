@@ -139,7 +139,7 @@ int parseProgramOptions(
         {
             if (genOp.debug>0){
                 std::cout << "DebugLevel " << genOp.debug <<  endl;
-                pepsOp.insert(pepsOp.begin(),2,(lexical_cast<string> ("-ol")+ lexical_cast<string>(genOp.debug)) );
+                pepsOp.insert(pepsOp.begin()+2,(lexical_cast<string> ("-ol")+ lexical_cast<string>(genOp.debug)) );
             }
         }
 		if (vm.count("version")) 
