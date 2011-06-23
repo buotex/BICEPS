@@ -7,11 +7,11 @@ const double PI = 3.14159265;
 
 void Biceps::initialize(int argc, char* argv[])
 {    
-  mgfId = 0;
+  mgfId_ = 0;
   int status = parseProgramOptions(
                                    argc, argv, 
-                                   this->directOp, this->pepnOp, this->pepsOp, 
-                                   this->genOp);
+                                   directOp_, pepnOp_, pepsOp_, 
+                                   genOp_);
   
   if (status >0){
     return;
@@ -23,8 +23,8 @@ void Biceps::initialize(int argc, char* argv[])
     
     showLicenses();
     //initializing fasta file
-    fasta.debuglevel = genOp.debug;
-    fasta.loadBigFasta(genOp.fastaname);
+    fasta_.debuglevel = genOp_.debug;
+    fasta_.loadBigFasta(genOp_.fastaname);
     loadAAModifications();
     //going through the mgf
     readMGF();        
@@ -34,7 +34,7 @@ void Biceps::initialize(int argc, char* argv[])
 void Biceps::showLicenses()
 {
 #ifdef HAVE_PEPNOVO
-  if (genOp.tool == PEPNOVO || genOp.tool == PEPNDIREC)
+  if (genOp_.tool == PEPNOVO || genOp_.tool == PEPNDIREC)
   {
     std::cout  << "\n"<< "PepNovo+, Build " << build_name << "\n"
     << "Copyright 2008, The Regents of the University of California. All Rights Reserved." << "\n"
@@ -43,7 +43,7 @@ void Biceps::showLicenses()
   }
 #endif
 #ifdef HAVE_DIRECTAG
-  if (genOp.tool == DIRECTAG || genOp.tool == PEPNDIREC)
+  if (genOp_.tool == DIRECTAG || genOp_.tool == PEPNDIREC)
   {
     std::cout << "\n"<< "DirecTag " << DIRECTAG_VERSION_STRING << " (" << DIRECTAG_BUILD_DATE << ")\n" 
     << DIRECTAG_LICENSE << endl; 
@@ -98,10 +98,10 @@ bool Biceps::isDosFile(std::string & filename)
 
 void Biceps::readMGF()
 {
-    std::string filename = genOp.mgfname + string(".mgf");
+    std::string filename = genOp_.mgfname + string(".mgf");
 
     std::cout <<"Now reading " << filename << std::endl;
-    this->fasta.setNumTags(genOp.numTags);
+    fasta_.setNumTags(genOp_.numTags);
 
     std::string linebuffer; //< buffering the textlines in the mgf file
     bool validSpectrum = true; //<So we can just skip if it's invalid.
@@ -126,7 +126,7 @@ void Biceps::readMGF()
 
     ofstream bufferfile;
     ofstream results;
-    string tempresultname = std::string("Biceps_tempResults") + genOp.mgfname + string(".txt");
+    string tempresultname = std::string("Biceps_tempResults") + genOp_.mgfname + string(".txt");
     results.open(tempresultname.c_str(), ios::binary); //Biceps_results will handle the final output.
 
     while(std::getline(mgfFile, linebuffer, '\n') )
@@ -135,7 +135,7 @@ void Biceps::readMGF()
        //first case, we're at the beginning of a new spectrum-subsection
         if(linebuffer.substr(0, 8) == "BEGIN IO"){
         
-            mgfId++;
+            mgfId_++;
             if (inBeginIons)
             {
                 //throw runtime_error(("BEGIN IONS tag found without previous BEGIN IONS being closed at" + lexical_cast<string>(size_t(mgfFile.tellg())-linebuffer.length()-1) + "\n")); 
@@ -146,7 +146,7 @@ void Biceps::readMGF()
             validSpectrum = true;
             inBeginIons = true;
             if (bufferfile.is_open()) bufferfile.close();
-            bufferfile.open(genOp.sSpectrumFN.c_str(), fstream::trunc | ios::binary);
+            bufferfile.open(genOp_.sSpectrumFN.c_str(), fstream::trunc | ios::binary);
             if (!bufferfile.good()) { cerr << "Problem writing to buffer, check your writing rights please." << std::endl;} 
 
             if (dosformat)
@@ -271,18 +271,18 @@ void Biceps::readMGF()
                 continue; //just go to the next line
             }
 
-            fasta.initializeMGF(charge, precursormass);
+            fasta_.initializeMGF(charge, precursormass);
 
-            cout << "Analyzing spectrum " << mgfId << endl;
+            cout << "Analyzing spectrum " << mgfId_ << endl;
             
             //Start analyzing by calling run_programs, which will run directag/pepnovo and then pepsplice afterwards
             bool success = run_programs(); //if an actual result was found, return true, else return false;
             if (success){ 
-                Pepsplice::PepspliceResult & res = pepResults.back();
-                indices.push_back(mgfId);
+                Pepsplice::PepspliceResult & res = pepResults_.back();
+                indices.push_back(mgfId_);
                 titles.push_back(title);
                 //if it's good, write the result to a file
-                writeResult(results, res, mgfId, title);
+                writeResult(results, res, mgfId_, title);
                 //pepres.pop_back();
                 ++numGoodscores;
             }
@@ -295,16 +295,16 @@ void Biceps::readMGF()
 
 
 
-    assert(pepResults.size() == numGoodscores);//check if all the results are in pepres
+    assert(pepResults_.size() == numGoodscores);//check if all the results are in pepres
 
     ofstream resfile;
-    string resfileName = string("Biceps_gmm") + genOp.mgfname + string(".txt");
+    string resfileName = string("Biceps_gmm") + genOp_.mgfname + string(".txt");
     resfile.open(resfileName.c_str(), ios::trunc | ios::binary);
 
     //temporary score-output to call bic on.
-    for(size_t i = 0; i < pepResults.size(); ++i)
+    for(size_t i = 0; i < pepResults_.size(); ++i)
     {
-        resfile << pepResults[i].score << "\n";
+        resfile << pepResults_[i].score << "\n";
     }
     resfile << std::flush;
     resfile.close();
@@ -315,18 +315,18 @@ void Biceps::readMGF()
     double cutoff;
 
     //final output
-    if (pepResults.size() > 10){
+    if (pepResults_.size() > 10){
         gmm_bic(2,numGoodscores,resfileName.c_str(), mu, sigma, labels);
         cutoff = findCutoff(mu, sigma, 2); //using 0.05 as cutoff
 
-        Biceps::writeCompleteResult(pepResults, indices, titles, labels, mu, sigma, cutoff);
-        Biceps::writeFasta(pepResults);
+        Biceps::writeCompleteResult(pepResults_, indices, titles, labels, mu, sigma, cutoff);
+        Biceps::writeFasta(pepResults_);
     }
 }
 
 
 void Biceps::writeCompleteResult
-(const std::vector<PepspliceResult> & pepResults, 
+(const std::vector<PepspliceResult> & pepResults_, 
  const std::vector<int> & indices, 
  const std::vector<string> & titles, 
  const std::vector<int> & labels, 
@@ -335,16 +335,16 @@ void Biceps::writeCompleteResult
  const double cutoff) const
 {
     std::ofstream finalOutput;
-    std::string finalOutputName = string("Biceps_Results") + genOp.mgfname+ string(".txt");
+    std::string finalOutputName = string("Biceps_Results") + genOp_.mgfname+ string(".txt");
     finalOutput.open("Biceps_Results.txt", ios::trunc);
     if (!finalOutput) throw runtime_error(finalOutputName + string(" can't be written, skipping."));
-    for (size_t i = 0; i < pepResults.size(); i++)
+    for (size_t i = 0; i < pepResults_.size(); i++)
     {
-        if (pepResults[i].score > cutoff)
+        if (pepResults_[i].score > cutoff)
         {
-            writeResult(finalOutput, pepResults[i], indices[i],titles[i]);
+            writeResult(finalOutput, pepResults_[i], indices[i],titles[i]);
             finalOutput << "Label: " << labels[i] << "\n";
-            finalOutput << "Confidence: " << returnConfidence(pepResults[i].score, mu[labels[i]-1], sigma[labels[i]-1]) << std::endl;
+            finalOutput << "Confidence: " << returnConfidence(pepResults_[i].score, mu[labels[i]-1], sigma[labels[i]-1]) << std::endl;
         }
     }
     finalOutput.close();
@@ -352,13 +352,13 @@ void Biceps::writeCompleteResult
 }
 
 
-void Biceps::writeFasta(std::vector<PepspliceResult> & pepResults)
+void Biceps::writeFasta(std::vector<PepspliceResult> & pepResults_)
 {
     //the parsing/changing isn't commutative, so the order is important - high bic is more important here.
-    std::sort(pepResults.begin(),pepResults.end(), PepspliceResultComparator());
+    std::sort(pepResults_.begin(),pepResults_.end(), PepspliceResultComparator());
     
     std::ofstream fastaoutput;
-    string fastaoutputname = string("Biceps_Fasta") + genOp.mgfname + string(".fasta"); 
+    string fastaoutputname = string("Biceps_Fasta") + genOp_.mgfname + string(".fasta"); 
     fastaoutput.open(fastaoutputname.c_str(), ios::trunc);
     if (!fastaoutput.is_open())
     {
@@ -368,17 +368,17 @@ void Biceps::writeFasta(std::vector<PepspliceResult> & pepResults)
 
     // pick a sequence of the original fasta, check if the pepsplice results can be found, change accordingly
     // write correct output to a file afterwards.
-    for (size_t i = 0; i < fasta.bigfasta.size(); ++i)
+    for (size_t i = 0; i < fasta_.bigfasta.size(); ++i)
     {
-        string buffer = fasta.bigfasta[i];
-        for (size_t j = 0; j < pepResults.size(); ++j)
+        string buffer = fasta_.bigfasta[i];
+        for (size_t j = 0; j < pepResults_.size(); ++j)
         {
             size_t pos = 0;
             for(;;)
             {
-                pos = buffer.find(pepResults[j].OrigSequence,pos);
+                pos = buffer.find(pepResults_[j].OrigSequence,pos);
                 if (pos != std::string::npos)
-                    buffer.replace(pos, pepResults[j].OrigSequence.size(), pepResults[j].Sequence);
+                    buffer.replace(pos, pepResults_[j].OrigSequence.size(), pepResults_[j].Sequence);
 
                 else {
                     break;
@@ -386,7 +386,7 @@ void Biceps::writeFasta(std::vector<PepspliceResult> & pepResults)
                 ++pos;
             }    
         }
-        fastaoutput << fasta.bigfasta_descriptions[i] << "\n";
+        fastaoutput << fasta_.bigfasta_descriptions[i] << "\n";
         size_t limiter = 0;
         while (limiter <buffer.size()) 
         {
@@ -406,8 +406,8 @@ bool Biceps::run_programs(){
 
     string pepnovoTags; //save the resulting tags there.
     string directagTags;
-    pepnovoTags.reserve(genOp.numTags*5 + 1); //hardcoded TagLength = 5 for speedup in fastasearch later
-    directagTags.reserve(genOp.numTags*5 + 1); //hardcoded TagLength = 5 for speedup in fastasearch later
+    pepnovoTags.reserve(genOp_.numTags*5 + 1); //hardcoded TagLength = 5 for speedup in fastasearch later
+    directagTags.reserve(genOp_.numTags*5 + 1); //hardcoded TagLength = 5 for speedup in fastasearch later
 
     //not only the tags but also their occurence place has to be saved.
     vector<float> plowPeakMzs;
@@ -419,8 +419,8 @@ bool Biceps::run_programs(){
     //the following parts will only be executed if they were activated at the CMake stage. 
 #ifdef HAVE_PEPNOVO
     try{
-        if (genOp.tool == PEPNOVO || genOp.tool == PEPNDIREC){
-            pepnovoFunc(pepnOp.size(),pepnOp, pepnovoTags, plowPeakMzs);
+        if (genOp_.tool == PEPNOVO || genOp_.tool == PEPNDIREC){
+            pepnovoFunc(pepnOp_.size(),pepnOp_, pepnovoTags, plowPeakMzs);
         }
     }
     catch(string & e)
@@ -439,9 +439,9 @@ bool Biceps::run_programs(){
 #ifdef HAVE_DIRECTAG
 
     try{
-        if (genOp.tool == DIRECTAG || genOp.tool == PEPNDIREC){
-            std::string cachename = std::string("Biceps_DirectagCache") + genOp.mgfname + std::string(".cache");
-            directagFunc(directOp.size(),directOp, directagTags, dlowPeakMzs, cachename); //tags written
+        if (genOp_.tool == DIRECTAG || genOp_.tool == PEPNDIREC){
+            std::string cachename = std::string("Biceps_DirectagCache") + genOp_.mgfname + std::string(".cache");
+            directagFunc(directOp_.size(),directOp_, directagTags, dlowPeakMzs, cachename); //tags written
         }
     }
     catch(const std::exception & e)
@@ -465,37 +465,37 @@ bool Biceps::run_programs(){
 
     }
     //void createFasta(string & tags,  deque<string> & fastaoutput, deque<size_t> & indices);
-    //fasta.createFasta(tags);
+    //fasta_.createFasta(tags);
 
 
 
 
-    //fasta.loadTags(pepnovoTags, directagTags, plowPeakMzs, dlowPeakMzs);
-    fasta.clearTags();
+    //fasta_.loadTags(pepnovoTags, directagTags, plowPeakMzs, dlowPeakMzs);
+    fasta_.clearTags();
     //save the tags separately
-    int pepN = fasta.loadTags(pepnovoTags, plowPeakMzs, fasta.pepntags);
-    int dirN = fasta.loadTags(directagTags, dlowPeakMzs, fasta.directags);
+    int pepN = fasta_.loadTags(pepnovoTags, plowPeakMzs, fasta_.pepntags);
+    int dirN = fasta_.loadTags(directagTags, dlowPeakMzs, fasta_.directags);
 
-    tagcount = fasta.getNumTags();
+    tagcount = fasta_.getNumTags();
 
 
-    if (genOp.debug>0){
+    if (genOp_.debug>0){
         cout << "The following tags were found:" << endl;
-        fasta.printTags();
+        fasta_.printTags();
     }
 
     vector<PepspliceResult> results; //we will pass this by reference and insert good results via pepsplice.
     
     //Pepsplice will run with different penalties according to genOp
     Pepsplice::PepspliceResult bestresult =
-        runPepsplice(0, 0,fasta.pepntags.size(), 0,fasta.directags.size() ); //< saving the best result.
+        runPepsplice(0, 0,fasta_.pepntags.size(), 0,fasta_.directags.size() ); //< saving the best result.
     
 
     bestresult.mutation = false; //add as flag
     results.push_back(bestresult);
 
     //if mutations should be considered and the result isn't good enough, runPepsplice will create a modified fasta and run again.
-    if (genOp.mutation == true)
+    if (genOp_.mutation == true)
     {
         if (bestresult.bic < 1-(1.098612)/2*log((float)bestresult.n/2) || bestresult.k == 0)
         {            
@@ -511,7 +511,7 @@ bool Biceps::run_programs(){
     //pick the best result if it's viable.(there will be a dummy in there at the least)
     if (results[0].k > 0)
     {
-        pepResults.push_back(results[0]);
+        pepResults_.push_back(results[0]);
         return 1;
     }
     else {
@@ -539,37 +539,37 @@ PepspliceResult Biceps::runPepsplice(bool mutation, int pepN1, int pepN2,  int d
 
     if(mutation == false)
     {
-        pepsplice_penalties = this->genOp.max_penalties;
+        pepsplice_penalties = this->genOp_.max_penalties;
     }
     else 
     {
-        pepsplice_penalties = this->genOp.max_penalties_mutated;
+        pepsplice_penalties = this->genOp_.max_penalties_mutated;
     }
 
 //create fasta will use the given tags and indices to create a temporary fasta (memory only), we will pass the results to the pepsplice_func
 
 
 #ifdef HAVE_PEPNOVO
-    if (this->genOp.tool == PEPNOVO || this->genOp.tool == PEPNDIREC)
+    if (this->genOp_.tool == PEPNOVO || this->genOp_.tool == PEPNDIREC)
     {
         std::vector<std::tuple<unsigned int, std::string, std::string> > pepnFasta; //We will use this to keep the fasta created by the Fasta class.
-        fasta.createFasta(mutation,pepN1,pepN2, fasta.pepntags, pepnFasta); 
-        if ( fasta.getMatches() > 0) 
+        fasta_.createFasta(mutation,pepN1,pepN2, fasta_.pepntags, pepnFasta); 
+        if ( fasta_.getMatches() > 0) 
         {
-            Pepsplice::pepsplice_func(pepsOp.size(),pepsOp,penalty_mutation, pepsplice_penalties, pepnresults, pepnFasta); //< this should fill the results and the fastaoutput vector.
-            fasta.matchSequences(pepnresults[0], pepnFasta);
+            Pepsplice::pepsplice_func(pepsOp_.size(),pepsOp_,penalty_mutation, pepsplice_penalties, pepnresults, pepnFasta); //< this should fill the results and the fastaoutput vector.
+            fasta_.matchSequences(pepnresults[0], pepnFasta);
         }        
     }
 #endif
 #ifdef HAVE_DIRECTAG
-    if (this->genOp.tool == DIRECTAG || this->genOp.tool == PEPNDIREC)
+    if (this->genOp_.tool == DIRECTAG || this->genOp_.tool == PEPNDIREC)
     {
         std::vector<std::tuple<unsigned int, std::string, std::string> > direcFasta; //We will use this to keep the fasta created by the Fasta class.
-        fasta.createFasta(mutation,dirN1, dirN2, fasta.directags, direcFasta); 
-        if ( fasta.getMatches() > 0) 
+        fasta_.createFasta(mutation,dirN1, dirN2, fasta_.directags, direcFasta); 
+        if ( fasta_.getMatches() > 0) 
         {
-            Pepsplice::pepsplice_func(pepsOp.size(),pepsOp,penalty_mutation, pepsplice_penalties, direcresults, direcFasta); //< this should fill the results and the fastaoutput vector.
-            fasta.matchSequences(direcresults[0], direcFasta);
+            Pepsplice::pepsplice_func(pepsOp_.size(),pepsOp_,penalty_mutation, pepsplice_penalties, direcresults, direcFasta); //< this should fill the results and the fastaoutput vector.
+            fasta_.matchSequences(direcresults[0], direcFasta);
         }
     }
 #endif
@@ -596,7 +596,7 @@ int Biceps::writeResult(std::ostream & os, const Pepsplice::PepspliceResult & re
     os << "OrigSequence: " << res.OrigSequence << "\n";   
     for (std::list<unsigned int>::const_iterator it = res.fastaIds.begin(); it != res.fastaIds.end(); ++it){
       os << "fastaId: " << *it << "\n";
-      os << "fastaId: " << fasta.offerDescription(*it) << "\n";
+      os << "fastaId: " << fasta_.offerDescription(*it) << "\n";
     }
 
 
@@ -636,7 +636,7 @@ string Biceps::convertTupleString(const string & sequence)const
     string newSeq = "";
     for (size_t i = 0; i < sequence.size(); i++)
     {
-        if ((unsigned char) sequence[i]>91) newSeq += aamod.find((unsigned char)sequence[i])->second;
+        if ((unsigned char) sequence[i]>91) newSeq += aamod_.find((unsigned char)sequence[i])->second;
         else newSeq += sequence[i]; 
     }
 
@@ -650,17 +650,17 @@ void Biceps::loadAAModifications()
 {
 
     ifstream inFile1;
-    string aamodline;
+    string aamod_line;
 
-    int aamod_i_ascii = 128;
+    int aamod__i_ascii = 128;
     inFile1.open("in_AAmodifications.param", ios::binary);	
-    while(getline(inFile1, aamodline)){
-        if(aamodline[0] != '#'){
+    while(getline(inFile1, aamod_line)){
+        if(aamod_line[0] != '#'){
 
-            //cout << "\n" << aamodline;
+            //cout << "\n" << aamod_line;
 
             //parse line field-wise		
-            istringstream iss(aamodline);
+            istringstream iss(aamod_line);
             string field;
             int i_field = 0;
             unsigned char aa = 0;	
@@ -669,7 +669,7 @@ void Biceps::loadAAModifications()
                 if(i_field == 1){
                     aa = (unsigned char)field[0];
                     //assign ascii start code for current amino acid
-                    aamod[aamod_i_ascii] = aa + 32;
+                    aamod_[aamod__i_ascii] = aa + 32;
                 }else{
                     //assign alternative mass for current amino acid
                     unsigned char c = field[0];
@@ -678,13 +678,13 @@ void Biceps::loadAAModifications()
                     //modification type: (pepNterm, )pepCterm, [protNterm, ]protCterm, _internal
                     if(c == '(' || c == ')' || c == '[' || c == ']' || c == '_'){
 
-                        aamod[aamod_i_ascii] = aa + 32;			
-                        //aamod_type[aamod_i_ascii] = c;
+                        aamod_[aamod__i_ascii] = aa + 32;			
+                        //aamod__type[aamod__i_ascii] = c;
 
-                        aamod_i_ascii++;
+                        aamod__i_ascii++;
 
                     }else{
-                        cout << "\nDnaAA.cpp line 99: please convert the modification file with dos2unix or else define what type of modification you require: " << aamodline << "\n";
+                        cout << "\nDnaAA.cpp line 99: please convert the modification file with dos2unix or else define what type of modification you require: " << aamod_line << "\n";
                     }
                 }
             }//tag or not tag
@@ -703,7 +703,7 @@ double Biceps::returnConfidence(double score, double mu, double sigma) const
 
 void Biceps::checkTupleConversion() const
 {
-    for (map<unsigned char, char>::const_iterator it = aamod.begin(); it != aamod.end(); ++it)
+    for (map<unsigned char, char>::const_iterator it = aamod_.begin(); it != aamod_.end(); ++it)
     {
         cout << "ascii: "<<it->first <<" newascii: " << it->second << endl;
     }

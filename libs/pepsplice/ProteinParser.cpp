@@ -36,6 +36,7 @@ namespace Pepsplice{
     {
       for (it = currentfasta.begin(); it != currentfasta.end(); ++it)
       {
+        //ProteinId = original sequence, ProteinSeq = newSequence
         currentprotein = new Protein(std::get<2>(*it), std::get<1>(*it));
         if (se1->outputlevel>2) {se1->os << std::get<2>(*it)<< " " << std::get<1>(*it) << '\n';}
         
@@ -102,7 +103,7 @@ namespace Pepsplice{
             //if(monoparentmassMH > se1->max_monoparentmassMH) break;
             //changes BYR changed Tuple call to include original
        
-            if (len > MAXSEQUENCESIZE) throw runtime_error("Sequence too large to fit in Memorypool, adjust MAXSEQUENCESIZE in definitions.h");
+            if (len > MAXSEQUENCESIZE) throw runtime_error("Sequence too large to fit in Memorypool, adjust MAXSEQUENCESIZE in definitions.h and recompile");
             if (se1->outputlevel > 2)
             {
               se1->os << seq.substr(ps,len) << " " << oldseq.substr(ps,len) << endl;
@@ -111,6 +112,7 @@ namespace Pepsplice{
             
             oldSequences->push_back(oldseq.substr(ps, len));
             //changed by BX, using the string sequence now, copying happens in the constructor.
+            //it's ok to pass the string "seq" to the constructor, it will get cut out by the constructor itself
             tuples1->addTuple(new Tuple(monoparentmassMH, len, ps, pe, pe+1, pe, seq, oldSequenceCount,NULL, currentprotein, false, false, istrypticstart, istrypticend));
             oldSequenceCount++;
             //cout << "\n hightup is here"<<hightup;

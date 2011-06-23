@@ -36,27 +36,27 @@ using namespace std;
 
 //class Match;
 namespace Pepsplice{
-class Protein
-{
-	
-public:
-    Protein(string id);
-	Protein(string id, string  sequence_);
-    virtual ~Protein(); //TODO why virtual?
-    //~Protein();
-    string protid;
-    string protseq;
-	double risk;
-	int peptides;
-	//unsigned int fastaid;
-	vector<int> matches; //integers that can be used in Spectra::matches
-	
-	void appendSubSeq(string & parsedline);
-	int getLength();
-	void initializeConfidence();
-	void adjustProteinConfidence(double peptideconfidence, int matchindex);
-	double getProteinConfidence();
-	int getPeptides();
-};
+  class Protein
+  {
+
+    public:
+      Protein(string id);
+      Protein(string id, string  sequence_);
+      virtual ~Protein(); //TODO why virtual?
+      //~Protein();
+      string protid;
+      string protseq;
+      double risk;
+      int peptides;
+      //unsigned int fastaid;
+      vector<int> matches; //integers that can be used in Spectra::matches
+
+      void appendSubSeq(string & parsedline);
+      int getLength();
+      void initializeConfidence();
+      void adjustProteinConfidence(double peptideconfidence, int matchindex);
+      double getProteinConfidence();
+      int getPeptides();
+  };
 }
 #endif /*PROTEIN_H_*/

@@ -64,29 +64,29 @@ using boost::bad_lexical_cast;
 class Biceps{
 private:
     ///Options for directag, for number of tags, mgf-name etc.
-    vector<string> directOp;
+    vector<string> directOp_;
 
     ///Options for pepsplice, has fastaname, mgf-name etc.
-    vector<string> pepnOp;
+    vector<string> pepnOp_;
 
     ///Options for pepnovo, holding mgf-filename etc.
-    vector<string> pepsOp;
+    vector<string> pepsOp_;
 
     ///general_options, for Number of tags etc.
-    general_options genOp;
+    general_options genOp_;
 
     ///Save all the results of the Pepsplice outputs
-    vector<PepspliceResult> pepResults;
+    vector<PepspliceResult> pepResults_;
 
     ///See class Fasta documentation
-    Fasta fasta;
+    Fasta fasta_;
 
     ///index of the current sub-mgf
-    unsigned int mgfId;
+    unsigned int mgfId_;
 
     ///Pepsplice uses a separate in_AAmodifications.param to decide the possible mutations.
     ///This map is needed to re-translate the modifications into ascii for logging reasons.
-    map<unsigned char, char> aamod;
+    map<unsigned char, char> aamod_;
 
 
 private:
