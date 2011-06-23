@@ -173,7 +173,7 @@ float Fasta::calcWeight(const string& tag) const
 void Fasta::createFasta(const bool mutated, const unsigned int tagsbegin, const unsigned int tagsend, const vector<Tag> & tags, std::vector<std::tuple<unsigned int, std::string, std::string> > & currentFasta)
 {
     unsigned int numlasttag;
-    if (debuglevel > 1) this->outfile.open("etsresults.fasta", ios::binary);
+    if (debuglevel > 1) this->outfile.open("__biceps.fasta", ios::binary);
     
     this->matches =0;
     //begin parsing of the tags;

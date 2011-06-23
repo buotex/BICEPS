@@ -225,11 +225,12 @@ void Services::incrementNucleotides(){
 }
 
 void Services::suggestProgressReport(){ 
-
+  if (this->outputlevel > 1){
   if(globaltime->timeSinceStart() > nexttime && force_tb_report == false){
     doProgressReport();
     //writeLogFiles();
     nexttime = nexttime * 1.05 + 1;
+  }
   }
 }
 
