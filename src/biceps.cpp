@@ -650,20 +650,20 @@ void Biceps::loadAAModifications()
 {
 
     ifstream inFile1;
-    string aamod_line;
+    string aamod;
 
-    int aamod__i_ascii = 128;
+    int aamod_i_ascii = 128;
     inFile1.open(biceps::bicepsconfigpath.append("/in_AAmodifications.param").c_str(), ios::binary);	
     if (inFile1.fail()) std::cerr << "Warning, file: in_AAmodifications.param not found" << std::endl;
-    while(getline(inFile1, aamod_line)){
+    while(getline(inFile1, aamod)){
       if (aamodline[aamodline.size()-1] == '\r') aamodline = aamodline.substr(0,aamodline.size() - 1);
 
-      if(aamod_line[0] != '#'){
+      if(aamod[0] != '#'){
 
-        //cout << "\n" << aamod_line;
+        //cout << "\n" << aamod;
 
         //parse line field-wise		
-        istringstream iss(aamod_line);
+        istringstream iss(aamod);
         string field;
         int i_field = 0;
         unsigned char aa = 0;	
@@ -672,7 +672,7 @@ void Biceps::loadAAModifications()
           if(i_field == 1){
             aa = (unsigned char)field[0];
             //assign ascii start code for current amino acid
-            aamod_[aamod__i_ascii] = aa + 32;
+            aamod_[aamod_i_ascii] = aa + 32;
           }else{
             //assign alternative mass for current amino acid
             unsigned char c = field[0];
@@ -681,13 +681,13 @@ void Biceps::loadAAModifications()
             //modification type: (pepNterm, )pepCterm, [protNterm, ]protCterm, _internal
             if(c == '(' || c == ')' || c == '[' || c == ']' || c == '_'){
 
-              aamod_[aamod__i_ascii] = aa + 32;			
-              //aamod__type[aamod__i_ascii] = c;
+              aamod_[aamod_i_ascii] = aa + 32;			
+              //aamod__type[aamod_i_ascii] = c;
 
-              aamod__i_ascii++;
+              aamod_i_ascii++;
 
             }else{
-              cout << "\nDnaAA.cpp line 99: please convert the modification file with dos2unix or else define what type of modification you require: " << aamod_line << "\n";
+              cout << "\nDnaAA.cpp line 99: please convert the modification file with dos2unix or else define what type of modification you require: " << aamod << "\n";
             }
           }
         }//tag or not tag
