@@ -1,4 +1,5 @@
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${BICEPS_SOURCE_DIR}/include ${BICEPS_BINARY_DIR}/include)
+
 
 SET(PEPSPLICE_SRCS
 	BestMatches.cpp

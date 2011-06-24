@@ -1,16 +1,16 @@
 
 SET(
     DIRECTAG_SRC_DIRS
-    ${PROJECT_SOURCE_DIR}/libs/directag/freicore 
-    ${PROJECT_SOURCE_DIR}/libs/directag/pwiz-src 
-    ${PROJECT_SOURCE_DIR}/libs/directag/pwiz-src/libraries
-    ${PROJECT_SOURCE_DIR}/libs/directag/pwiz-src/pwiz
-    ${PROJECT_SOURCE_DIR}/libs/directag/ext/src/expat-2.0.1/lib
+    ${BICEPS_SOURCE_DIR}/libs/directag/freicore 
+    ${BICEPS_SOURCE_DIR}/libs/directag/pwiz-src 
+    ${BICEPS_SOURCE_DIR}/libs/directag/pwiz-src/libraries
+    ${BICEPS_SOURCE_DIR}/libs/directag/pwiz-src/pwiz
+    ${BICEPS_SOURCE_DIR}/libs/directag/ext/src/expat-2.0.1/lib
    )
-include_directories("${PROJECT_SOURCE_DIR}/libs/pepsplice" "${PROJECT_SOURCE_DIR}/libs/pepnovo" "${PROJECT_SOURCE_DIR}/libs/directag/directag" "${PROJECT_SOURCE_DIR}/libs/boost" ${DIRECTAG_SRC_DIRS} "${PROJECT_SOURCE_DIR}/libs/gmm-bic")
-include_directories("${PROJECT_SOURCE_DIR}/include")
+include_directories("${BICEPS_SOURCE_DIR}/libs/pepsplice" "${BICEPS_SOURCE_DIR}/libs/pepnovo" "${BICEPS_SOURCE_DIR}/libs/directag/directag" "${BICEPS_SOURCE_DIR}/libs/boost" ${DIRECTAG_SRC_DIRS} "${BICEPS_SOURCE_DIR}/libs/gmm-bic")
+include_directories("${BICEPS_SOURCE_DIR}/include" "${BICEPS_BINARY_DIR}/include")
 include_directories(${Boost_INCLUDE_DIRS})
-  link_directories (${PROJECT_SOURCE_DIR}/src "${PROJECT_SOURCE_DIR}/libs/pepsplice" "${PROJECT_SOURCE_DIR}/libs/pepnovo" "${PROJECT_SOURCE_DIR}/libs/directag/directag" "${PROJECT_SOURCE_DIR}/libs" ${DIRECTAG_SRC_DIRS} "${PROJECT_SOURCE_DIR}/libs/gmm-bic")
+  link_directories (${BICEPS_SOURCE_DIR}/src "${BICEPS_SOURCE_DIR}/libs/pepsplice" "${BICEPS_SOURCE_DIR}/libs/pepnovo" "${BICEPS_SOURCE_DIR}/libs/directag/directag" "${BICEPS_SOURCE_DIR}/libs" ${DIRECTAG_SRC_DIRS} "${BICEPS_SOURCE_DIR}/libs/gmm-bic")
 #add_library(ets main.cpp fasta.cpp fasta.h)
 
 if(MSVC)
@@ -62,7 +62,7 @@ add_executable(biceps main.cpp biceps.cpp biceps.h fasta.cpp fasta.h commandpars
 target_link_libraries(biceps pepsplice ${Boost_PROGRAM_OPTIONS_LIBRARY} ${PEPNOVO_LIBS} ${DIRECTAG_LIBS} ${GMMBIC_LIBS}) 
 
 
-INSTALL(TARGETS biceps
-  RUNTIME DESTINATION bin
-)
+  INSTALL(TARGETS biceps
+      RUNTIME DESTINATION bin
+      )
 

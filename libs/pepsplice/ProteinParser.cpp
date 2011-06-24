@@ -103,7 +103,7 @@ namespace Pepsplice{
             //if(monoparentmassMH > se1->max_monoparentmassMH) break;
             //changes BYR changed Tuple call to include original
        
-            if (len > MAXSEQUENCESIZE) throw runtime_error("Sequence too large to fit in Memorypool, adjust MAXSEQUENCESIZE in definitions.h and recompile");
+            if (len > MAXSEQUENCESIZE) throw runtime_error("Sequence too large to fit in Memorypool, adjust MAXSEQUENCESIZE in bicepsdefinitions.h and recompile");
             if (se1->outputlevel > 2)
             {
               se1->os << seq.substr(ps,len) << " " << oldseq.substr(ps,len) << endl;

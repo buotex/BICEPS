@@ -1,4 +1,4 @@
-include_directories(${BICEPS_BINARY_DIR}/libs/pepnovo ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${BICEPS_BINARY_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR})
 set( PEPNOVO_SRCS
     AdvancedScoreModel.cpp
     AdvancedScoreModel_fill.cpp

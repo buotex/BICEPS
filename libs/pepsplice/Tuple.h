@@ -34,7 +34,7 @@
 #include "Chromosome.h"
 #include "Protein.h"
 #include "pool.h"
-#include "definitions.h"
+#include "bicepsdefinitions.h"
 
 using namespace std;
 namespace Pepsplice{

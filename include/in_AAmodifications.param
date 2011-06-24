@@ -1,0 +1,23 @@
+C;_103.00919;_117.02484;
+D;_129.04259;
+E;(111.032025;_143.05824;
+K;_142.11062;_170.1;_156.12627;
+M;_147.0354;
+N;_128.05858;_142.07423;
+P;_113.04768;
+Q;(111.032025;_142.07423;
+R;_170.11677;
+S;_166.99836;_92;
+T;_181.01401;
+W;_202.07423;
+Y;_243.02966;
+X;[42.01056;
+#
+#
+#_=internal;
+#(=pepNterm;
+#)=pepCterm;
+#[=protNterm;
+#]=protCterm;
+#no spaces please. wrong: C; _103.01; (222.22; correct: C;_103.01;(222.22;
+#cysteine carbamidomethylation (C160) is considered standard (hard-coded, DnaAA.cpp), C103 as modification

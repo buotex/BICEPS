@@ -1,4 +1,6 @@
 #include "DnaAA.h"
+#include "bicepsdefinitions.h"
+static string PARAMPATH = biceps::bicepsconfigpath.append("/in_AAmodifications.param");
 namespace Pepsplice{
     
     DnaAA::DnaAA()
@@ -166,15 +168,13 @@ namespace Pepsplice{
         
         ifstream inFile1;
         string aamodline;
-        
         double mass = 0;
         int aamod_i_ascii = 128;
         bool protNterm = false;
         bool protCterm = false;
-        inFile1.open("in_AAmodifications.param", ios::binary);	
+        inFile1.open(PARAMPATH.c_str(), ios::binary);	
         while(inFile1.good()){
             getline(inFile1, aamodline);
-            
             if(aamodline[0] != '#'){
                 
                 //cout << "\n" << aamodline;

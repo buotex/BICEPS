@@ -1,5 +1,5 @@
 #include "Services.h"
-#include "definitions.h"
+#include "bicepsdefinitions.h"
 namespace Pepsplice{
 Services::Services()
 {

@@ -5,6 +5,7 @@
 #include "Fragmentation.h"
 #include "BasicDataStructs.h"
 #include "includes.h"
+#include "bicepsdefinitions.h"
 
 // the Config class holds all configuration variables that are used
 // by the models and programs: aa's, PTMs, thresholds etc
@@ -120,7 +121,7 @@ private:
 class Config {
 public:
 	
-	Config() : resource_dir("${BICEPS_MODEL_PATH}"), min_exclude_range(9999999), max_exclude_range(NEG_INF) {};
+	Config(); 
 
 	// sets the values for all defined PTMs
 	// any additional PTMs can only be user defined

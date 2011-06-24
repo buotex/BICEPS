@@ -653,7 +653,8 @@ void Biceps::loadAAModifications()
     string aamod_line;
 
     int aamod__i_ascii = 128;
-    inFile1.open("in_AAmodifications.param", ios::binary);	
+    inFile1.open(biceps::bicepsconfigpath.append("/in_AAmodifications.param").c_str(), ios::binary);	
+    if (inFile1.fail()) std::cerr << "Warning, file: in_AAmodifinitions.param not found" << std::endl;
     while(getline(inFile1, aamod_line)){
         if(aamod_line[0] != '#'){
 

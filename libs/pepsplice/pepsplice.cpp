@@ -1,38 +1,20 @@
 #include "pepsplice.h"
-#include "definitions.h"
+#include "bicepsdefinitions.h"
 namespace Pepsplice{
     
     extern Pool<Pepsplice::Tuple, POOLSIZE> __POOL__;    
     
     Pool<Pepsplice::Tuple, POOLSIZE> __POOL__ = Pool<Pepsplice::Tuple, POOLSIZE>();
+
     void pepsplice_func(int argc, vector<string> & argv, float penalty_mutation_, std::vector<float> & max_penalties, std::vector<PepspliceResult>& results, const std::vector<std::tuple<unsigned int, std::string, std::string> >& currentfasta){
         try{
             __POOL__.reinit();
-            //begin changes BX   
-            //std::vector<std::vector<std::string> > fastaoutput;
-            //end changes BX
-            //argument containers
-            // string* *argstrings = new string*[argc]; //dynamic array of string pointers
             vector<string*> specfiles;	
             vector<string> params;	
             
             //parse arguments (parameters and spectrum files mixed)
             //cout << "\n\nmain.cpp: Reading " << argc - 1 << " arguments\n";
             string paramstring = "";
-            //	for(int i = 1; i < argc; i++){
-            //		argstrings[i] = new string(); //TODO memory leak here
-            //		(*argstrings[i]) = argv[i];
-            //		
-            //		if((*argstrings[i])[0] == '-'){
-            //			//parse parameter
-            //			params.push_back( (*argstrings[i]) ); //parse parameters all at once afterwards
-            //			paramstring += (*argstrings[i]); //for output file names later on
-            //		}else{
-            //			//parse spectrum
-            //			specfiles.push_back( argstrings[i] );
-            //		}
-            //	}
-            //    
             for (int i = 1; i < argc; i++)
             {
                 if ( (argv[i])[0] == '-'){

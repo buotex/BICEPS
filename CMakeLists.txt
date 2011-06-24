@@ -48,18 +48,25 @@ if(NOT CMAKE_BUILD_TYPE)
       FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
-# more warnings against everything
+# more warnings against everything, setting compiler-dependent flags
 if(NOT MSVC)
   SET(CMAKE_CXX0X_FLAGS "-std=c++0x" )
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-sign-compare -Wno-sign-conversion " )
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX0X_FLAGS}" )
+  SET(BICEPS_CONFIG_PATH "$ENV{HOME}/.biceps")
+ELSE(NOT MSVC)
+
+  SET(BICEPS_CONFIG_PATH "$ENV{HOMEPATH}/.biceps")
+
+
+
 endif(NOT MSVC)
 
-set(BICEPS_MODEL_PATH ${CMAKE_INSTALL_PREFIX}/bin/Models)
+
 
   CONFIGURE_FILE(
-      ${CMAKE_CURRENT_SOURCE_DIR}/libs/pepnovo/Config.h.cmake 
-      ${BICEPS_BINARY_DIR}/libs/pepnovo/Config.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/include/bicepsdefinitions.h.cmake
+      ${BICEPS_BINARY_DIR}/include/bicepsdefinitions.h
       )
 
   add_subdirectory(libs)
@@ -96,8 +103,12 @@ ENDIF(DOXYGEN_FOUND)
       COMPONENT documentation
       PATTERN "Doxyfile" EXCLUDE)
   INSTALL(DIRECTORY ${BICEPS_SOURCE_DIR}/include/Models
-      DESTINATION bin
-      COMPONENT models)
+      DESTINATION ${BICEPS_CONFIG_PATH}
+      COMPONENT config)
+  INSTALL(FILES ${BICEPS_SOURCE_DIR}/include/in_AAmodifications.param
+      DESTINATION ${BICEPS_CONFIG_PATH}
+      COMPONENT config)
+
 
 #############################################################################
 # syncing docs
@@ -122,7 +133,7 @@ SET(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
   SET(CPACK_RESOURCE_FILE_README "${BICEPS_SOURCE_DIR}/README.txt")
   SET(CPACK_RESOURCE_FILE_LICENSE "${BICEPS_SOURCE_DIR}/LICENSE.txt")
 
-set(CPACK_COMPONENTS_ALL libraries headers applications models documentation)
+set(CPACK_COMPONENTS_ALL libraries headers applications config documentation)
   set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "Application")
   set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "C++ Interface Documentation")
 
