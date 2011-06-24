@@ -654,42 +654,44 @@ void Biceps::loadAAModifications()
 
     int aamod__i_ascii = 128;
     inFile1.open(biceps::bicepsconfigpath.append("/in_AAmodifications.param").c_str(), ios::binary);	
-    if (inFile1.fail()) std::cerr << "Warning, file: in_AAmodifinitions.param not found" << std::endl;
+    if (inFile1.fail()) std::cerr << "Warning, file: in_AAmodifications.param not found" << std::endl;
     while(getline(inFile1, aamod_line)){
-        if(aamod_line[0] != '#'){
+      if (aamod_line[ammod_line.size()-1] == '\r') aamod_line = aamod_line.substr(0,aamod_line.size() - 1);
 
-            //cout << "\n" << aamod_line;
+      if(aamod_line[0] != '#'){
 
-            //parse line field-wise		
-            istringstream iss(aamod_line);
-            string field;
-            int i_field = 0;
-            unsigned char aa = 0;	
-            while( getline(iss, field, ';') ){
-                i_field++;
-                if(i_field == 1){
-                    aa = (unsigned char)field[0];
-                    //assign ascii start code for current amino acid
-                    aamod_[aamod__i_ascii] = aa + 32;
-                }else{
-                    //assign alternative mass for current amino acid
-                    unsigned char c = field[0];
-                    string m = field.substr(1);
-                    //cout << "\nc: " << c << " m: " << m;
-                    //modification type: (pepNterm, )pepCterm, [protNterm, ]protCterm, _internal
-                    if(c == '(' || c == ')' || c == '[' || c == ']' || c == '_'){
+        //cout << "\n" << aamod_line;
 
-                        aamod_[aamod__i_ascii] = aa + 32;			
-                        //aamod__type[aamod__i_ascii] = c;
+        //parse line field-wise		
+        istringstream iss(aamod_line);
+        string field;
+        int i_field = 0;
+        unsigned char aa = 0;	
+        while( getline(iss, field, ';') ){
+          i_field++;
+          if(i_field == 1){
+            aa = (unsigned char)field[0];
+            //assign ascii start code for current amino acid
+            aamod_[aamod__i_ascii] = aa + 32;
+          }else{
+            //assign alternative mass for current amino acid
+            unsigned char c = field[0];
+            string m = field.substr(1);
+            //cout << "\nc: " << c << " m: " << m;
+            //modification type: (pepNterm, )pepCterm, [protNterm, ]protCterm, _internal
+            if(c == '(' || c == ')' || c == '[' || c == ']' || c == '_'){
 
-                        aamod__i_ascii++;
+              aamod_[aamod__i_ascii] = aa + 32;			
+              //aamod__type[aamod__i_ascii] = c;
 
-                    }else{
-                        cout << "\nDnaAA.cpp line 99: please convert the modification file with dos2unix or else define what type of modification you require: " << aamod_line << "\n";
-                    }
-                }
-            }//tag or not tag
-        }//not #
+              aamod__i_ascii++;
+
+            }else{
+              cout << "\nDnaAA.cpp line 99: please convert the modification file with dos2unix or else define what type of modification you require: " << aamod_line << "\n";
+            }
+          }
+        }//tag or not tag
+      }//not #
     }//while loop
     inFile1.close();
 }
@@ -697,17 +699,17 @@ void Biceps::loadAAModifications()
 
 double Biceps::returnConfidence(double score, double mu, double sigma) const
 {
-    return 1/(sigma * std::sqrt(2*PI)) * std::exp( -0.5 * (score-mu)*(score-mu)/(sigma *sigma));
+  return 1/(sigma * std::sqrt(2*PI)) * std::exp( -0.5 * (score-mu)*(score-mu)/(sigma *sigma));
 }
 
 
 
 void Biceps::checkTupleConversion() const
 {
-    for (map<unsigned char, char>::const_iterator it = aamod_.begin(); it != aamod_.end(); ++it)
-    {
-        cout << "ascii: "<<it->first <<" newascii: " << it->second << endl;
-    }
+  for (map<unsigned char, char>::const_iterator it = aamod_.begin(); it != aamod_.end(); ++it)
+  {
+    cout << "ascii: "<<it->first <<" newascii: " << it->second << endl;
+  }
 
 
 }
