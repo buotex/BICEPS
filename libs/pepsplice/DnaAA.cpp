@@ -176,7 +176,7 @@ namespace Pepsplice{
         while(inFile1.good()){
             getline(inFile1, aamodline);
             if(aamodline[0] != '#'){
-              if (aamod_line[ammod_line.size()-1] == '\r') aamod_line = aamod_line.substr(0,aamod_line.size() - 1);
+              if (aamodline[ammodline.size()-1] == '\r') aamodline = aamodline.substr(0,aamodline.size() - 1);
               //cout << "\n" << aamodline;
 
               //parse line field-wise		
