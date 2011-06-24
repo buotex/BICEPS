@@ -1,3 +1,4 @@
+include_directories(${Boost_INCLUDE_DIRS}) 
 add_subdirectory(pepsplice)
 if(HAVE_PEPNOVO)
 add_subdirectory(pepnovo)

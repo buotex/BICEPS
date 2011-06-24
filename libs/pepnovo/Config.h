@@ -5,7 +5,6 @@
 #include "Fragmentation.h"
 #include "BasicDataStructs.h"
 #include "includes.h"
-#include "bicepsdefinitions.h"
 
 // the Config class holds all configuration variables that are used
 // by the models and programs: aa's, PTMs, thresholds etc
