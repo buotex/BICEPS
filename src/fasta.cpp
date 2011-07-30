@@ -547,7 +547,7 @@ void Fasta::matchSequences(PepspliceResult & pepresult, const std::vector<std::t
   {
     if (std::get<2>(currentFasta[i]).find(pepresult.OrigSequence) != std::string::npos)
     {
-      pepresult.fastaIds.push_back(std::get<0>(currentFasta[i]));    
+      pepresult.fastaIds.insert(std::get<0>(currentFasta[i]));    
     }
   }
 }

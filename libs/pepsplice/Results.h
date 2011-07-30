@@ -31,7 +31,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include <list>
+#include <set>
 
 #include "Spectrum.h"
 #include "Services.h"
@@ -83,7 +83,7 @@ class PepspliceResult
     bool tool;
     float penalty_max;
     bool mutation;
-    std::list<unsigned int> fastaIds;
+    std::set<unsigned int> fastaIds;
     //    list<unsigned int> * seqIds;
 
     PepspliceResult():Sequence(""),OrigSequence(""),n(0),k(0),bic(-99999.0f),score(0.0f),penalty(0.0f){}

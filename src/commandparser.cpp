@@ -82,20 +82,20 @@ int parseProgramOptions(
     // config file
     po::options_description config("Configuration");
     config.add_options()
-      ("mgf", po::value<string>(&mgf),"use that mgf file as input data")
+      ("mgf", po::value<string>(&mgf),"path to the mgf file used as input data")
       ("fasta", po::value<string>(&fasta),
-       "fastafile to use at the beginning")
+       "path to the fasta file used as reference for the search")
       ("tags", po::value<int>(&numtags)->default_value(20), 
-       "number of Tags")
+       "number of tags to be generated, more tags increase the search space and run time")
       ("tool", po::value<int>(&tool)->default_value(2),
-       "0 - pepnovo, 1 - directag, 2 - both")
+       "which tools to be used for tag generation (0 - pepnovo, 1 - directag, 2- both")
       //("tagLength", po::value<int>(&tagLength)->default_value(5),
       // "tagLength, should be higher than 2")
       ("tol", po::value<double>(&tol)->default_value(1E-6),
-       "massTolerance for pepsplice")
-      ("debug",po::value<int>(&genOp.debug)->default_value(0), "cout debug messages")
-      ("mutation",po::value<bool>(&genOp.mutation)->default_value(true), "Default[true], mutated tags will be used when the results are too bad otherwise")
-      ("penaltyvector", po::value< std::string >(&penaltyvector)->default_value("2.3,3.2"), "vector of penalties used in pepsplice, divided by ,")
+       "massTolerance for running pepsplice in Dalton")
+      ("debug",po::value<int>(&genOp.debug)->default_value(0), "display debug messages")
+      ("mutation",po::value<bool>(&genOp.mutation)->default_value(true), "Should substitutions be considered within the tag when necessary (1=yes) or should all tags be considered to be error-free allowing a faster search (0)")
+      ("penaltyvector", po::value< std::string >(&penaltyvector)->default_value("2.3,3.2"), "vector of penalties used in pepsplice indicating the size of the search space, important 0 - not including any changes to sequence,")
       ("penaltyvecmutated", po::value< std::string >(&penaltyvecmutated), "penalties for mutated tags, by default same penalties as non-mutated will be used")
       ;
 
@@ -271,7 +271,7 @@ int parseProgramOptions(
     }
 
 
-    if (vm.count("massTolerance"))
+    if (vm.count("tol"))
     {
       std::cout
         << "MassTolerance is set to: " << tol << "\n";
