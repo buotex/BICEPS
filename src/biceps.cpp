@@ -1,5 +1,6 @@
 #include <tuple>
 #include "biceps.h"
+#include <boost/filesystem.hpp>
 
 const static double PICONST = 3.14159265;
 
@@ -33,6 +34,7 @@ void Biceps::initialize(int argc, char* argv[])
 
 void Biceps::showLicenses()
 {
+std::cout << boost::filesystem::initial_path() << std::endl;
 #ifdef HAVE_PEPNOVO
   if (genOp_.tool == PEPNOVO || genOp_.tool == PEPNDIREC)
   {
@@ -660,7 +662,7 @@ void Biceps::loadAAModifications()
   string aamodline;
 
   int aamod_i_ascii = 128;
-  inFile1.open(biceps::bicepsconfigpath.append("/in_AAmodifications.param").c_str(), ios::binary);	
+  inFile1.open(biceps::getConfigDirectory().append("/in_AAmodifications.param").c_str(), ios::binary);	
   if (inFile1.fail()) std::cerr << "Warning, file: in_AAmodifications.param not found" << std::endl;
   while(getline(inFile1, aamodline)){
     if (aamodline[aamodline.size()-1] == '\r') aamodline = aamodline.substr(0,aamodline.size() - 1);

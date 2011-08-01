@@ -1,6 +1,6 @@
 #include "DnaAA.h"
 #include "bicepsdefinitions.h"
-static string PARAMPATH = biceps::bicepsconfigpath.append("/in_AAmodifications.param");
+static string PARAMPATH = biceps::getConfigDirectory().append("/in_AAmodifications.param");
 namespace Pepsplice{
     
     DnaAA::DnaAA()

@@ -2,7 +2,7 @@
 #include "auxfun.h"
 #include "bicepsdefinitions.h"
 
-Config::Config() : resource_dir(biceps::bicepsconfigpath.append("/Models").c_str()), min_exclude_range(9999999), max_exclude_range(NEG_INF) {};
+Config::Config() : resource_dir(biceps::getConfigDirectory().append("/Models").c_str()), min_exclude_range(9999999), max_exclude_range(NEG_INF) {};
 
 
 void Config::init_with_defaults()

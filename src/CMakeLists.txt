@@ -64,5 +64,6 @@ target_link_libraries(biceps pepsplice ${Boost_PROGRAM_OPTIONS_LIBRARY} ${PEPNOV
 
   INSTALL(TARGETS biceps
       RUNTIME DESTINATION bin
+      COMPONENT applications
       )
 

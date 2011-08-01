@@ -2,6 +2,12 @@
 #define __BICEPS_INCLUDE_BICEPSDEFINITIONS_H__
 #include <cstdlib>
 #include <string>
+#include <boost/filesystem.hpp>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #define PEN_PTM 1.2f
 #define PEN_SNP 2.0f
 #define PEN_METHOX 0.3f
@@ -13,7 +19,20 @@
 #define POOLSIZE 51000 //Size of the memory pool for the tuples, has to be > tuplebuffer as extra space has to be reserved for the Tuple-Matches:w
 #define MAXSEQUENCESIZE 142 //how long a resulting sequence can be.
 namespace biceps{
-static string bicepsconfigpath = string(${BICEPS_CONFIG_PATH}).append("/.biceps");
-}
+static std::string getConfigDirectory() {
 
+#ifdef _WIN32
+char BICEPSPATH[2048];
+GetModuleFileNameA(NULL, BICEPSPATH, 2048);
+std::string temppath1 = std::string(BICEPSPATH);
+boost::filesystem::path temppath2(temppath1);
+temppath2.remove_filename();
+std::string bicepsconfigpath = temppath2.string();
+#else
+std::string bicepsconfigpath = std::string(${BICEPS_CONFIG_PATH});
+#endif
+bicepsconfigpath.append("/.biceps");
+return bicepsconfigpath;
+}
+}
 #endif
