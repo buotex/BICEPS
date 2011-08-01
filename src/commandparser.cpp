@@ -52,8 +52,6 @@ int parseProgramOptions(
   //Some Pepsplice parameters which should be used every time.
   pepsOp.push_back(lexical_cast<string>("-sa1"));
   pepsOp.push_back(lexical_cast<string>("-bm10"));
-  pepsOp.push_back(lexical_cast<string>("-ma0.0214632"));
-  pepsOp.push_back(lexical_cast<string>("-mb0.0214632"));
   pepsOp.push_back(lexical_cast<string>("-te1"));
   pepsOp.push_back(lexical_cast<string>("-np0"));
 
@@ -91,8 +89,8 @@ int parseProgramOptions(
        "which tools to be used for tag generation (0 - pepnovo, 1 - directag, 2- both")
       //("tagLength", po::value<int>(&tagLength)->default_value(5),
       // "tagLength, should be higher than 2")
-      ("tol", po::value<double>(&tol)->default_value(1E-6),
-       "massTolerance for running pepsplice in Dalton")
+      ("tol", po::value<double>(&tol)->default_value(10),
+       "massTolerance for running pepsplice in ppm")
       ("debug",po::value<int>(&genOp.debug)->default_value(0), "display debug messages")
       ("mutation",po::value<bool>(&genOp.mutation)->default_value(true), "Should substitutions be considered within the tag when necessary (1=yes) or should all tags be considered to be error-free allowing a faster search (0)")
       ("penaltyvector", po::value< std::string >(&penaltyvector)->default_value("2.3,3.2"), "vector of penalties used in pepsplice indicating the size of the search space, important 0 - not including any changes to sequence,")
@@ -275,7 +273,7 @@ int parseProgramOptions(
     {
       std::cout
         << "MassTolerance is set to: " << tol << "\n";
-      pepsOp.push_back(("-tol" + lexical_cast<string>(tol)));
+      pepsOp.push_back(("-mt" + lexical_cast<string>(tol)));
     }
 
     //depending on the settings in CMakeLists, parts here will be disabled

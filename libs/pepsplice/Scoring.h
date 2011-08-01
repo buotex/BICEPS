@@ -53,7 +53,8 @@ private:
 	int aamaxlen;
 	int maxparentmass;
 	//int cumulatedpeaksmax;
-	double pmtolneg, pmtolpos, pmmin, pmmax;
+	//double pmtolneg, pmtolpos;
+  double pmmin, pmmax;
 	double discretization_factor;
 	
 	//objects

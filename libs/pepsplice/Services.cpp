@@ -31,8 +31,8 @@ Services::Services()
 	scoring = 7; // > 4 = hypergeometric   3 = shared peak getTotal minus average
 	extraload = 0;
 	adapttuplebuffer = false;
-	masstol_belowDa = 0.05;
-	masstol_aboveDa = 0.05;
+	//masstol_belowDa = 0.05;
+	//masstol_aboveDa = 0.05;
 	outfileprefix = "out";
 	outfilenumber = "0";
 	outfileparams = "";
@@ -84,10 +84,10 @@ Services::Services()
 	//updateParentMassTol();
 	
 	//parameters mass tolerance
-	masstol_below = masstol_belowDa * dnaAA1->scaling_factor; //below means that the theoretical parent mass may be that much below the measured parent mass (see Scoring::scoreTuple pmmin)
-	masstol_above = masstol_aboveDa * dnaAA1->scaling_factor; //Scoring.cpp
-	masstol = masstol_below + masstol_above; //Scoring.cpp
-	safety_margin_disc = (int)((masstol) / dnaAA1->discretization_factor + 2); //Scoring.cpp
+	//masstol_below = masstol_belowDa * dnaAA1->scaling_factor; //below means that the theoretical parent mass may be that much below the measured parent mass (see Scoring::scoreTuple pmmin)
+	//masstol_above = masstol_aboveDa * dnaAA1->scaling_factor; //Scoring.cpp
+	//masstol = masstol_below + masstol_above; //Scoring.cpp
+	//safety_margin_disc = (int)((masstol) / dnaAA1->discretization_factor + 2); //Scoring.cpp
 	
 	//parameters preprocessing
 	learning_spectrum_intensities = true;
@@ -154,8 +154,10 @@ Services::~Services() //Changes by BX
 
 
 void Services::setMinMaxPM(double min_meas_PM, double max_meas_PM){
-	min_monoparentmassMH = min_meas_PM - masstol_above - masstol_below;	
-	max_monoparentmassMH = max_meas_PM + masstol_above + masstol_below;	
+	//min_monoparentmassMH = min_meas_PM - masstol_above - masstol_below;	
+	//max_monoparentmassMH = max_meas_PM + masstol_above + masstol_below;	
+  min_monoparentmassMH = min_meas_PM * (1. - 2. * masstolfactor);
+  max_monoparentmassMH = max_meas_PM * (1. + 2. * masstolfactor);
 }
 
 //void Services::updateParentMassTol(){
@@ -461,6 +463,7 @@ void Services::parseParameter(string arg){
     if (this->outputlevel > 2) cout << "\nhotspottolerance: " << hotspottolerance << flush;
   }
 
+/* Changes by BX
   if(argprefix == "ma"){
     if (this->outputlevel > 2) cout<< "\nmass_aboveDa as read in:"<<arg.substr(3)<<flush;
     masstol_aboveDa = string_to_double(arg.substr(3));
@@ -486,6 +489,7 @@ void Services::parseParameter(string arg){
     safety_margin_disc = ((masstol) / dnaAA1->discretization_factor + 2);
     //end changes BYR
   }
+*/
 
   if(argprefix == "md"){
     doModifications = (int)string_to_double(arg.substr(3));
@@ -502,6 +506,10 @@ void Services::parseParameter(string arg){
     if (this->outputlevel > 2) cout << "\nminpepconfidence: " << minpepconfidence << flush;
   }
 
+  if(argprefix == "mt"){
+    masstolfactor = 1E-6 * (double)string_to_double(arg.substr(3));
+    if (this->outputlevel > 2) cout << "\nmassToleranceFactor: " << masstolfactor << flush;
+  }
   if(argprefix == "mu"){
     mod_s80 = (bool)string_to_double(arg.substr(3));
     if (this->outputlevel > 2) cout << "\nmod_s80: " << mod_s80 << flush;

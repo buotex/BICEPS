@@ -338,10 +338,9 @@ void Biceps::writeCompleteResult
   std::string finalOutputName = string("Biceps.Results") + genOp_.mgfname+ string(".txt");
   finalOutput.open(finalOutputName.c_str(), ios::trunc);
   if (!finalOutput) throw runtime_error(finalOutputName + string(" can't be written, skipping."));
-
   if (pepResults_.size() <= 10) 
   {
-    finalOutput << "Not enough peptides were found, so the confidence calculation couldn't be done reliably, so the unfiltered results will be written in this file. \n";
+    finalOutput << "Not enough peptides were found therefore the confidence calculation couldn't be done reliably, so the unfiltered results will be written in this file. \n";
   }
 
   for (size_t i = 0; i < pepResults_.size(); i++)

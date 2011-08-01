@@ -47,8 +47,8 @@ namespace Pepsplice{
         
 		
         //parent mass tolerance
-        pmtolneg = se1->masstol_below;  //below means that the theoretical parent mass may be that much below the measured parent mass
-        pmtolpos = se1->masstol_above;
+        //pmtolneg = se1->masstol_below;  //below means that the theoretical parent mass may be that much below the measured parent mass
+        //pmtolpos = se1->masstol_above;
 		
     }
     
@@ -264,14 +264,14 @@ namespace Pepsplice{
 
     
     void Scoring::scoreTuplesAmortizedCacheAware2(bool slicealways)
-    { //TODO BX change loop here because we only look at 2 spectra
+    { 
         //int cumulatedbytesmax = se1->processorcacheL2;
         
         int lenspectra = spectra1->spectra.size();
         int lentuples = vtuples->size();
         
-        float thparentmin = spectra1->spectra[0]->parentmassMH - pmtolpos;
-        float thparentmax = spectra1->spectra[lenspectra-1]->parentmassMH + pmtolneg;
+        float thparentmin = spectra1->spectra[0]->parentmassMH * (1. - se1->masstolfactor);
+        float thparentmax = spectra1->spectra[lenspectra-1]->parentmassMH * (1. + se1->masstolfactor);
         
         bool charge2 = (spectra1->spectra[0]->chargestate == 2);
         
@@ -293,8 +293,8 @@ namespace Pepsplice{
             
            // calculateThSpec((*vtuples)[i], false, thspec);
             for (int j = 0; j < lenspectra; ++j)
-                if ((*vtuples)[i]->thparentmassMH -pmtolneg < spectra1->spectra[j]->parentmassMH &&
-                    (*vtuples)[i]->thparentmassMH +pmtolpos > spectra1->spectra[j]->parentmassMH )
+                if ((*vtuples)[i]->thparentmassMH * (1. - se1->masstolfactor) < spectra1->spectra[j]->parentmassMH &&
+                    (*vtuples)[i]->thparentmassMH * (1. + se1->masstolfactor) > spectra1->spectra[j]->parentmassMH )
                     {
                         calculateScore((*vtuples)[i], spectra1->spectra[j], thspec, 0);
                     }

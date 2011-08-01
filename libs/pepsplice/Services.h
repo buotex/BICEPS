@@ -50,9 +50,10 @@ public:
 	//bool parametersparsed;
 	int	eachXspec;
 	int tupspec;
-	double masstol_above;
-	double masstol_below;
-	double masstol;
+	//double masstol_above;
+	//double masstol_below;
+	//double masstol;
+  double masstolfactor;
 	int safety_margin_disc;
 	double min_monoparentmassMH, max_monoparentmassMH;
 	int trypticendsrequired;
@@ -66,8 +67,8 @@ public:
 	int scoring;
 	int extraload;
 	bool adapttuplebuffer;
-	double masstol_belowDa;
-	double masstol_aboveDa;
+	//double masstol_belowDa;
+	//double masstol_aboveDa;
 	bool dismisstuples;
 	bool force_tb_report;
 	int scorebins;
