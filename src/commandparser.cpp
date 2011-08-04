@@ -51,7 +51,7 @@ int parseProgramOptions(
 
   //Some Pepsplice parameters which should be used every time.
   pepsOp.push_back(lexical_cast<string>("-sa1"));
-  pepsOp.push_back(lexical_cast<string>("-bm10"));
+  pepsOp.push_back(lexical_cast<string>("-bm20"));
   pepsOp.push_back(lexical_cast<string>("-te1"));
   pepsOp.push_back(lexical_cast<string>("-np0"));
 
