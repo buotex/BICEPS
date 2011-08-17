@@ -270,8 +270,8 @@ namespace Pepsplice{
         int lenspectra = spectra1->spectra.size();
         int lentuples = vtuples->size();
         
-        float thparentmin = spectra1->spectra[0]->parentmassMH * (1. - se1->masstolfactor);
-        float thparentmax = spectra1->spectra[lenspectra-1]->parentmassMH * (1. + se1->masstolfactor);
+        float thparentmin = spectra1->spectra[0]->parentmassMH / (1. + se1->masstolfactor);
+        float thparentmax = spectra1->spectra[lenspectra-1]->parentmassMH / (1. - se1->masstolfactor);
         
         bool charge2 = (spectra1->spectra[0]->chargestate == 2);
         

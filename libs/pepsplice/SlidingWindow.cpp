@@ -537,7 +537,7 @@ void SlidingWindow::writeProgress()
 	//distribution1->writeDistribution();
 }
 
-void SlidingWindow::enumerateSplicedPeptides()
+void SlidingWindow::enumerateSplicedPeptides() //never actually executed in our code
 {
 	//int k;
 	se = cheapMod(imodd); //suffix end is given by position of neighborhood

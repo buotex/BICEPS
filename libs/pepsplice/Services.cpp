@@ -156,8 +156,8 @@ Services::~Services() //Changes by BX
 void Services::setMinMaxPM(double min_meas_PM, double max_meas_PM){
 	//min_monoparentmassMH = min_meas_PM - masstol_above - masstol_below;	
 	//max_monoparentmassMH = max_meas_PM + masstol_above + masstol_below;	
-  min_monoparentmassMH = min_meas_PM * (1. - 2. * masstolfactor);
-  max_monoparentmassMH = max_meas_PM * (1. + 2. * masstolfactor);
+  min_monoparentmassMH = min_meas_PM * (1. - 2. * masstolfactor); //never actually used in the code
+  max_monoparentmassMH = max_meas_PM * (1. + 2. * masstolfactor); //never actually used in the code
 }
 
 //void Services::updateParentMassTol(){
