@@ -708,7 +708,9 @@ void Biceps::loadAAModifications()
 
 double Biceps::returnConfidence(double score, double mu, double sigma) const
 {
-
+  score = (score-mu) / sigma;
+  mu = 0.;
+  sigma = 1.;
   double k = 1. / (1+0.2316419 * score);
   double dens = 1./(sigma * sqrt(2*PICONST)) * exp( -0.5 * (score-mu)*(score-mu)/(sigma *sigma));
   const static double a1 = 0.319381530;
