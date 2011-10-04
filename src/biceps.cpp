@@ -212,7 +212,7 @@ void Biceps::readMGF()
           }
           else if(linebuffer.find('=') != string::npos)
           {
-            //continue; // ignored attribute
+            continue; // ignored attribute
           }
           else
           {
