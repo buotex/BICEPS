@@ -30,7 +30,7 @@ boost::filesystem::path bicepsconfigpath = temppath1.parent_path();
 #else
 boost::filesystem::path bicepsconfigpath(${BICEPS_CONFIG_PATH});
 #endif
-bicepsconfigpath.append("/.biceps");
+bicepsconfigpath.append(std::string("/.biceps"));
 return bicepsconfigpath.string();
 }
 }
