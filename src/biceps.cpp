@@ -168,15 +168,7 @@ void Biceps::readMGF()
     {
       if (!inBeginIons) continue;
 
-      if (dosformat)
-      {
-        bufferfile << linebuffer.substr(0,linebuffer.size()-1).c_str() << "\n";
-      }
 
-      else
-      {
-        bufferfile << linebuffer.c_str() << "\n";
-      }
 
       try
       {
@@ -194,8 +186,11 @@ void Biceps::readMGF()
           {
 
             string pepMassStr = linebuffer.substr(8);
+            pepMassStr = pepMassStr.substr(0,pepMassStr.find_first_of("\t "));
             //bal::trim(pepMassStr);
             precursormass= lexical_cast<float>(pepMassStr);
+
+            linebuffer = linebuffer.substr(0,linebuffer.find_first_of("\t "));
             //						selectedIon.set(MS_m_z, mz);
 
           }
@@ -234,6 +229,15 @@ void Biceps::readMGF()
           lexical_cast<string>(size_t(mgfFile.tellg())-linebuffer.length()-1) + ": " + linebuffer + "\n" << std::endl;
         inBeginIons = false;
         validSpectrum = false;
+      }
+      if (dosformat)
+      {
+        bufferfile << linebuffer.substr(0,linebuffer.size()-1).c_str() << "\n";
+      }
+
+      else
+      {
+        bufferfile << linebuffer.c_str() << "\n";
       }
       //continue;
     }	//else if (not end of spectrum)
