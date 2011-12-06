@@ -1,2 +1,2 @@
-add_library(gmm_bic STATIC gmm-bic.cpp gmm-bic.h)
+add_library(gmm_bic gmm-bic.cpp gmm-bic.h)
 

@@ -187,14 +187,14 @@ void fillInMetadata(const string& filename, RawFile& rawfile, MSData& msd)
     SourceFilePtr sourceFile(new SourceFile);
     bfs::path p(filename);
     sourceFile->id = "RAW1";
-    sourceFile->name = p.leaf();
-    sourceFile->location = string("file://") + bfs::complete(p.branch_path()).string();
+    sourceFile->name = p.filename().string();
+    sourceFile->location = string("file://") + bfs::absolute(p.branch_path()).string();
     sourceFile->cvParams.push_back(MS_Xcalibur_RAW_file);
     string sha1 = SHA1Calculator::hashFile(filename);
     sourceFile->cvParams.push_back(CVParam(MS_SHA_1, sha1));
     msd.fileDescription.sourceFilePtrs.push_back(sourceFile);
 
-    msd.id = stringToIDREF(p.leaf());
+    msd.id = stringToIDREF(p.filename().string());
 
     SoftwarePtr softwareXcalibur(new Software);
     softwareXcalibur->id = "Xcalibur";

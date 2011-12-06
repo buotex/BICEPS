@@ -59,4 +59,4 @@ auxfun.cpp
 base64.cpp
 
   )
-ADD_LIBRARY(pepnovo STATIC ${PEPNOVO_SRCS})
+ADD_LIBRARY(pepnovo ${PEPNOVO_SRCS})
