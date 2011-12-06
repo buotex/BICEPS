@@ -432,8 +432,8 @@ class Reader_MGF : public Reader
         SourceFilePtr sourceFile(new SourceFile);
         sourceFile->id = "MGF1";
         bfs::path p(filename);
-        sourceFile->name = p.leaf();
-        sourceFile->location = string("file://") + bfs::complete(p.branch_path()).string();
+        sourceFile->name = p.filename().string();
+        sourceFile->location = string("file://") + bfs::absolute(p.branch_path()).string();
         result.fileDescription.sourceFilePtrs.push_back(sourceFile);
         result.run.id = "Run1";
         result.run.spectrumListPtr = SpectrumListPtr(new SpectrumList_MGF(is, result));

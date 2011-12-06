@@ -218,11 +218,24 @@ using boost::filesystem::change_extension;
 using boost::filesystem::basename;
 using boost::filesystem::extension;
 
-#ifdef WIN32
-#define MAKE_PATH_FOR_BOOST(str) (boost::filesystem::path((str), boost::filesystem::native))
+
+#if BOOST_FILESYSTEM_VERSION == 2
+  #ifdef WIN32
+    #define MAKE_PATH_FOR_BOOST(str) (boost::filesystem::path((str), boost::filesystem::native))
+  #else
+    #define MAKE_PATH_FOR_BOOST(str) (boost::filesystem::path((str), boost::filesystem::native))
+  #endif
+
 #else
-#define MAKE_PATH_FOR_BOOST(str) (boost::filesystem::path((str), boost::filesystem::native))
+  #ifdef WIN32
+    #define MAKE_PATH_FOR_BOOST(str) (boost::filesystem::path((str)))
+  #else
+    #define MAKE_PATH_FOR_BOOST(str) (boost::filesystem::path((str)))
+  #endif
 #endif
+
+
+
 
 #ifdef USE_BOOST_REGEX
 using boost::regex_match;

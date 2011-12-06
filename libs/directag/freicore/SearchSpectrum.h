@@ -454,7 +454,7 @@ namespace freicore
 							const string& searchDatabase,
 							const RunTimeVariableMap& vars ) const
 		{
-			string scanName = basename( MAKE_PATH_FOR_BOOST(sourceFilepath) );
+			string scanName = basename( MAKE_PATH_FOR_BOOST( sourceFilepath ) );
 			string filename = scanName + filenameSuffix + ".pepXML";
 
 			ResidueMap fileResidueMap;
