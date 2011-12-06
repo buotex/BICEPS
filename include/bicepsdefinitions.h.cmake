@@ -24,15 +24,14 @@ static std::string getConfigDirectory() {
 #ifdef _WIN32
 char BICEPSPATH[2048];
 GetModuleFileNameA(NULL, BICEPSPATH, 2048);
-std::string temppath1 = std::string(BICEPSPATH);
-boost::filesystem::path temppath2(temppath1);
-temppath2.remove_filename();
-std::string bicepsconfigpath = temppath2.string();
+boost::filesystem::path temppath1(BICEPSPATH);
+boost::filesystem::path bicepsconfigpath = temppath1.parent_path();
+
 #else
-std::string bicepsconfigpath = std::string(${BICEPS_CONFIG_PATH});
+boost::filesystem::path bicepsconfigpath(${BICEPS_CONFIG_PATH});
 #endif
 bicepsconfigpath.append("/.biceps");
-return bicepsconfigpath;
+return bicepsconfigpath.string();
 }
 }
 #endif
