@@ -191,7 +191,7 @@ void Fasta::createFasta(const bool mutated, const unsigned int tagsbegin, const 
 }
 
 
-void Fasta::loadBigFasta(string & file) //initialize sequences 
+void Fasta::loadBigFasta(const string & file) //initialize sequences 
 {
     
 	int i = 0;

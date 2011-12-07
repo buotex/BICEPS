@@ -59,7 +59,7 @@ ENDIF(HAVE_DIRECTAG)
 add_executable(biceps main.cpp biceps.cpp biceps.h fasta.cpp fasta.h commandparser.h commandparser.cpp)
 
 
-target_link_libraries(biceps pepsplice ${Boost_PROGRAM_OPTIONS_LIBRARY} ${PEPNOVO_LIBS} ${DIRECTAG_LIBS} ${GMMBIC_LIBS}) 
+target_link_libraries(biceps pepsplice ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${PEPNOVO_LIBS} ${DIRECTAG_LIBS} ${GMMBIC_LIBS}) 
 
 
   INSTALL(TARGETS biceps

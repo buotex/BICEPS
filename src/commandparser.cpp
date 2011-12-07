@@ -150,9 +150,11 @@ int parseProgramOptions(
     {
       std::cout << "Input files are: " 
         << mgf << "\n";
-      genOp.mgfname = mgf.substr(0,mgf.length()-4);
+      genOp.mgfAbsPath = boost::filesystem::absolute(boost::filesystem::path(mgf));
+      genOp.mgfShortName = genOp.mgfAbsPath.stem().string(); 
+      
       //std::cout << vm["input-file"].as<vector<string> >();
-      genOp.sSpectrumFN = string("Biceps_buffer_") + genOp.mgfname + string(".mgf");
+      genOp.sSpectrumFN = string("Biceps.buffer.") + genOp.mgfShortName+ string(".mgf");
       directOp[1] = genOp.sSpectrumFN;
       pepnOp[2] = genOp.sSpectrumFN;
       pepsOp[1] = genOp.sSpectrumFN;
@@ -235,7 +237,7 @@ int parseProgramOptions(
     {
       std::cout
         << fasta << " will be used as a protein database." << "\n";
-      genOp.fastaname = fasta.c_str();
+      genOp.fastaAbsPath = boost::filesystem::absolute(boost::filesystem::path(fasta));
     }
     else
     {

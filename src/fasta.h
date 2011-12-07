@@ -112,7 +112,7 @@ class Fasta
     ///a hashing index containing all 2-combinations of AAs will also be made
     ///\param[in] filename of the fasta-database to index and match/search later, e.g. loadBigFasta(string("ipi.BOVIN.fasta"))
 
-    void loadBigFasta(std::string & filename);
+    void loadBigFasta(const std::string & filename);
 
 
     ///This method takes the unmodified tagstring, changes the L AAs to I for performance reasons and fills the internal tag vectors for further processing

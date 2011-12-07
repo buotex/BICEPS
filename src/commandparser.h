@@ -23,6 +23,9 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/program_options.hpp>
 
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
+
 using std::string;
 using std::vector;
 using std::fstream;
@@ -34,18 +37,18 @@ using boost::lexical_cast;
 
 ///for easier / clearer options
 enum TOOLS {
-    PEPNOVO,
-    DIRECTAG,
-    PEPNDIREC
+  PEPNOVO,
+  DIRECTAG,
+  PEPNDIREC
 };
 
 ///helper function
 template <typename T>
 void print_vector(std::vector<T> & vec){
-    for (size_t i = 0; i < vec.size(); i++)
-    {
-        std::cout << vec[i] << std::endl;
-    }
+  for (size_t i = 0; i < vec.size(); i++)
+  {
+    std::cout << vec[i] << std::endl;
+  }
 }
 
 
@@ -55,53 +58,54 @@ void print_vector(std::vector<T> & vec){
 
 struct general_options{
 
-    /// Chooses the Tool to use.
+  /// Chooses the Tool to use.
 
-    /// 0 == Pepnovo, 1 == Directag, 2 == Both.
-	/// Default: 2 (Int).
+  /// 0 == Pepnovo, 1 == Directag, 2 == Both.
+  /// Default: 2 (Int).
 
-    int tool;
-
-
-    ///Number of tags used, should be in range 1-50.
-	int numTags;
-
-    /// Name of complete Spectrum list, divided by END IONS / BEGIN IONS.
-
-    string mgfname;
-
-    /// Name of Fasta-database.
-
-	string fastaname;
-
-    /// Debuglevel.
-
-    /// Changes amount of Debug output
-    /// Default: 1, Values: 1-3
-    int debug;
+  int tool;
 
 
-    /// If 0, no mutation of the tags will be done by Biceps.
-    /// This will limit the number of matches tremendously,
-    /// only deactivate for speed reasons
-    /// Default: true bool
-    bool mutation;
+  ///Number of tags used, should be in range 1-50.
+  int numTags;
+
+  /// Name of complete Spectrum list, divided by END IONS / BEGIN IONS.
+
+  boost::filesystem::path mgfAbsPath;
+  std::string mgfShortName;
+
+  /// Name of Fasta-database.
+
+  boost::filesystem::path fastaAbsPath;
+
+  /// Debuglevel.
+
+  /// Changes amount of Debug output
+  /// Default: 1, Values: 1-3
+  int debug;
 
 
-    /// penalty-limits used in pepsplice, to limit the search-space.
+  /// If 0, no mutation of the tags will be done by Biceps.
+  /// This will limit the number of matches tremendously,
+  /// only deactivate for speed reasons
+  /// Default: true bool
+  bool mutation;
 
-    /// found sequences are mutated in pepsplice according to these limits,
-    /// the values used will be elevated slightly because of numerical reasons
-    /// Default: 2.3,3.2 (list of floats)
-    vector<float> max_penalties;
 
-    ///similar to max_penalties, saves the penalties for mutated tags.
-    vector<float> max_penalties_mutated;
-    /// Name of the Buffer for a single spectrum found in the mgf.
+  /// penalty-limits used in pepsplice, to limit the search-space.
 
-    /// It will be passed to the libraries.
-    /// Default: __buffer__.mgf (string)
-    string sSpectrumFN;
+  /// found sequences are mutated in pepsplice according to these limits,
+  /// the values used will be elevated slightly because of numerical reasons
+  /// Default: 2.3,3.2 (list of floats)
+  vector<float> max_penalties;
+
+  ///similar to max_penalties, saves the penalties for mutated tags.
+  vector<float> max_penalties_mutated;
+  /// Name of the Buffer for a single spectrum found in the mgf.
+
+  /// It will be passed to the libraries.
+  /// Default: __buffer__.mgf (string)
+  string sSpectrumFN;
 };
 
 

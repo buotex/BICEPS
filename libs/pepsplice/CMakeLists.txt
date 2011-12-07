@@ -28,4 +28,4 @@ SET(PEPSPLICE_SRCS
 	UnreachableBins.cpp
     pepsplice.cpp
 )
-add_library(pepsplice STATIC ${PEPSPLICE_SRCS})
+add_library(pepsplice ${PEPSPLICE_SRCS})

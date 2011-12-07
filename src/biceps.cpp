@@ -25,7 +25,7 @@ void Biceps::initialize(int argc, char* argv[])
     showLicenses();
     //initializing fasta file
     fasta_.debuglevel = genOp_.debug;
-    fasta_.loadBigFasta(genOp_.fastaname);
+    fasta_.loadBigFasta(genOp_.fastaAbsPath.string());
     loadAAModifications();
     //going through the mgf
     readMGF();        
@@ -100,7 +100,7 @@ bool Biceps::isDosFile(std::string & filename)
 
 void Biceps::readMGF()
 {
-  std::string filename = genOp_.mgfname + string(".mgf");
+  std::string filename = genOp_.mgfAbsPath.string();
 
   std::cout <<"Now reading " << filename << std::endl;
   fasta_.setNumTags(genOp_.numTags);
@@ -128,7 +128,7 @@ void Biceps::readMGF()
 
   ofstream bufferfile;
   ofstream results;
-  string tempresultname = std::string("Biceps_tempResults") + genOp_.mgfname + string(".txt");
+  string tempresultname = std::string("Biceps.tempResults.") + genOp_.mgfShortName + string(".txt");
   results.open(tempresultname.c_str(), ios::binary); //Biceps_results will handle the final output.
 
   while(std::getline(mgfFile, linebuffer, '\n') )
@@ -304,7 +304,7 @@ void Biceps::readMGF()
   assert(pepResults_.size() == numGoodscores);//check if all the results are in pepres
 
   ofstream resfile;
-  string resfileName = string("Biceps_gmm") + genOp_.mgfname + string(".txt");
+  string resfileName = string("Biceps.gmm.") + genOp_.mgfShortName + string(".txt");
   resfile.open(resfileName.c_str(), ios::trunc | ios::binary);
 
   //temporary score-output to call bic on.
@@ -341,7 +341,7 @@ void Biceps::writeCompleteResult
  const double cutoff) const
 {
   std::ofstream finalOutput;
-  std::string finalOutputName = string("Biceps.Results") + genOp_.mgfname+ string(".txt");
+  std::string finalOutputName = string("Biceps.Results.") + genOp_.mgfShortName + string(".txt");
   finalOutput.open(finalOutputName.c_str(), ios::trunc);
   if (!finalOutput) throw runtime_error(finalOutputName + string(" can't be written, skipping."));
   if (pepResults_.size() <= 10) 
@@ -371,7 +371,7 @@ void Biceps::writeFasta(std::vector<PepspliceResult> & pepResults_)
   std::sort(pepResults_.begin(),pepResults_.end(), PepspliceResultComparator());
 
   std::ofstream fastaoutput;
-  string fastaoutputname = string("Biceps_Fasta") + genOp_.mgfname + string(".fasta"); 
+  string fastaoutputname = string("Biceps.Fasta.") + genOp_.mgfShortName + string(".fasta"); 
   fastaoutput.open(fastaoutputname.c_str(), ios::trunc);
   if (!fastaoutput.is_open())
   {
@@ -391,7 +391,7 @@ void Biceps::writeFasta(std::vector<PepspliceResult> & pepResults_)
       {
         pos = buffer.find(pepResults_[j].OrigSequence,pos);
         if (pos != std::string::npos)
-          buffer.replace(pos, pepResults_[j].OrigSequence.size(), pepResults_[j].Sequence);
+          buffer.replace(pos, pepResults_[j].OrigSequence.size(), convertTupleString(pepResults_[j].Sequence));
 
         else {
           break;
@@ -453,7 +453,7 @@ bool Biceps::run_programs(){
 
   try{
     if (genOp_.tool == DIRECTAG || genOp_.tool == PEPNDIREC){
-      std::string cachename = std::string("Biceps_DirectagCache") + genOp_.mgfname + std::string(".cache");
+      std::string cachename = std::string("Biceps.DirectagCache.") + genOp_.mgfShortName + std::string(".cache");
       directagFunc(directOp_.size(),directOp_, directagTags, dlowPeakMzs, cachename); //tags written
     }
   }
