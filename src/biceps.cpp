@@ -356,7 +356,7 @@ void Biceps::writeCompleteResult
       writeResult(finalOutput, pepResults_[i], indices[i],titles[i]);
       if (pepResults_.size() > 10) {
         finalOutput << "Label: " << labels[i] << "\n";
-        finalOutput << "Confidence: " << returnConfidence(pepResults_[i].score, mu[labels[i]-1], sigma[labels[i]-1]) << std::endl;
+        finalOutput << "Confidence: " << returnConfidence(pepResults_[i].score, mu[0], sigma[0]) << std::endl;
       }
     }
   }
