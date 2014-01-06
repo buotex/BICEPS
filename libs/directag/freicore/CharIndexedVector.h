@@ -6,7 +6,7 @@ namespace freicore
 	template< class T >
 	class CharIndexedVectorIterator
 	{
-		typedef array< T, 129 > type;
+		typedef boost::array< T, 129 > type;
 		typename type::iterator m_itr;
 
 	public:
@@ -90,7 +90,7 @@ namespace freicore
 	template< class T >
 	class CharIndexedVectorConstIterator
 	{
-		typedef array< T, 129 > type;
+		typedef boost::array< T, 129 > type;
 		typename type::const_iterator m_itr;
 
 		typedef CharIndexedVectorConstIterator<T>	ItrType;
@@ -174,9 +174,9 @@ namespace freicore
 	};
 
 	template< class T >
-	struct CharIndexedVector : public array< T, 129 >
+	struct CharIndexedVector : public boost::array< T, 129 >
 	{
-		typedef array< T, 129 > type;
+		typedef boost::array< T, 129 > type;
 		typedef CharIndexedVectorIterator<T> iterator;
 		typedef CharIndexedVectorConstIterator<T> const_iterator;
 		typedef std::reverse_iterator<iterator> reverse_iterator;

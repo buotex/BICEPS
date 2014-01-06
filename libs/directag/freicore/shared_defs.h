@@ -161,16 +161,16 @@ namespace freicore
 		MvKey(	key_type v0 = -1, key_type v1 = -1, key_type v2 = -1, key_type v3 = -1, key_type v4 = -1,
 				key_type v5 = -1, key_type v6 = -1, key_type v7 = -1, key_type v8 = -1, key_type v9 = -1 )
 		{
-			if( v0 > -1 ) push_back( v0 );
-			if( v1 > -1 ) push_back( v1 );
-			if( v2 > -1 ) push_back( v2 );
-			if( v3 > -1 ) push_back( v3 );
-			if( v4 > -1 ) push_back( v4 );
-			if( v5 > -1 ) push_back( v5 );
-			if( v6 > -1 ) push_back( v6 );
-			if( v7 > -1 ) push_back( v7 );
-			if( v8 > -1 ) push_back( v8 );
-			if( v9 > -1 ) push_back( v9 );
+			if( v0 > -1 ) this->push_back( v0 );
+			if( v1 > -1 ) this->push_back( v1 );
+			if( v2 > -1 ) this->push_back( v2 );
+			if( v3 > -1 ) this->push_back( v3 );
+			if( v4 > -1 ) this->push_back( v4 );
+			if( v5 > -1 ) this->push_back( v5 );
+			if( v6 > -1 ) this->push_back( v6 );
+			if( v7 > -1 ) this->push_back( v7 );
+			if( v8 > -1 ) this->push_back( v8 );
+			if( v9 > -1 ) this->push_back( v9 );
 
 			//for( int i=0; i < (int) size(); ++i )
 			//	cout << at(i) << " ";

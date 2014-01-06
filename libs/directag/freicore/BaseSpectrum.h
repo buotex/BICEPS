@@ -123,7 +123,7 @@ namespace freicore
 		{
 			clear( false ); // if the spectra should be deleted, it should be before this point
 			for( ListConstIterator itr = rhs.begin(); itr != rhs.end(); ++itr )
-				typename BaseSpectraList< SpectrumType, SpectraListType >::push_back( *itr );
+				BaseSpectraList< SpectrumType, SpectraListType >::push_back( *itr );
 			//BaseList::insert( BaseList::end(), rhs.begin(), rhs.end() );
 			return reinterpret_cast< SpectraListType& >( *this );
 		}
